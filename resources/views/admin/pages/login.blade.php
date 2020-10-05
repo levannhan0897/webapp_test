@@ -10,6 +10,14 @@
         <h4 class="auth-header">
             Login Form
         </h4>
+        <?php
+            $message = Session::get('message');
+            $error = Session::get('error');
+            if($error == false && $message) {
+            echo '<p class="text-success text-center">'.$message.'</p>';
+            Session::put('message',null);
+            }
+        ?>
         <form action="">
             <div class="form-group">
                 <label for="">Username</label><input class="form-control" placeholder="Enter your username" type="text">
@@ -21,7 +29,7 @@
             </div>
             <div class="buttons-w">
                 <button class="btn btn-primary">Log in</button>
-                <a href="/admin/contact"> <button  class="btn btn-primary">Contact</button></a>
+                <a href="./register"> <div  class="btn btn-primary">Contact</div></a>
             </div>
         </form>
     </div>

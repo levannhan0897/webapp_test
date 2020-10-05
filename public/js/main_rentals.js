@@ -16,13 +16,8 @@ $(function () {
   // #1. RANGE SLIDER
   if ($('.ion-range-slider').length) {
     $('.ion-range-slider').ionRangeSlider({
-      type: "double",
       min: 0,
-      max: 1000000,
-      from: 200000,
-      to: 800000,
-      prefix: "$",
-      step: 50000
+      max: 200,
     });
   } // #2. FEATURES SELECT
 
