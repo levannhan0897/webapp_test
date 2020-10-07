@@ -25,3 +25,4 @@ Route::post('/login-api',[UserApiController::class,'login_api']);
 Route::post('/forgot-password-api',[UserApiController::class,'forgot_password_api']);
 Route::get('/get-states-api',[UserApiController::class,'get_states_api']);
 Route::post('/get-cities-api',[UserApiController::class,'get_cities_api']);
+Route::post('/update-ispection-api',[UserApiController::class,'update_ispection_api']);

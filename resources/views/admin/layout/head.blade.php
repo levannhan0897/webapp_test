@@ -19,4 +19,5 @@
     <link href="{{asset('bower_components/ion.rangeSlider/css/ion.rangeSlider.css')}}" rel="stylesheet">
     <link href="{{asset('bower_components/select2/dist/css/select2.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/main.css?version=4.5.0')}}" rel="stylesheet">
+    <link href="{{asset('icon_fonts_assets/simple-line-icons/css/simple-line-icons.css')}}" rel="stylesheet">
 </head>

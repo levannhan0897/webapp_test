@@ -173,4 +173,113 @@ class UserApiController extends Controller
         $country = DB::table('cities')->where('state_id',$req->id)->get();
         return response($country);
     }
+    public function roundTo($number, $to)
+    {
+        return round($number/$to, 0)* $to;
+    }
+    public function get_ispection_api(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+    }
+    public function update_ispection_api(Request $req){
+        // $validator = Validator::make($req->all(), [
+        //     'average_monthly_usage'=> 'required',
+        //     'average_sun_hours'=> 'required',
+        //     'bill_offset'=> 'required',
+        //     'lat'=> 'required',
+        //     'long'=> 'required',
+        //     'small_leg'=> 'required',
+        //     'large_leg'=> 'required',
+        //     'number_of_rows'=> 'required',
+        //     'inverter_length'=> 'required',
+        //     'deposit'=> 'required',
+        //     'down_payment'=> 'required',
+        //     'of_months'=> 'required',
+        //     'interest'=> 'required',
+        //     'existing_home'=> 'required',
+        //     ], [
+        //         'average_monthly_usage.required' => 'Average cannot be left blank',
+        //         'average_sun_hours.email'=>'Incorrect email format',
+        //         'bill_offset.required' => 'Name cannot be left blank',
+        //         'phone.required' => 'Phone cannot be left blank',
+        //         'lat.required' => 'Address cannot be left blank',
+        //         'long.required' => 'Phone cannot be left blank',
+        //     ]);
+        // if ($validator->fails()){
+        //         return response()->json([
+        //             'error' => true,
+        //             'message' => $validator->errors(),
+        //         ], 200);
+        //     }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        $remaining = null;
+        $emi = null;
+        $system_size=null;
+        
+        if(isset($get_inspec->average_monthly_usage)&&isset($get_inspec->average_sun_hours)&&isset($get_inspec->bill_offset)){
+        $system_size = ((($get_inspec->average_monthly_usage/30)/$get_inspec->average_sun_hours)*1.1)*(($get_inspec->bill_offset)/100);
+        }
+        // dd(gettype($get_inspec->system_size));
+        if(isset($get_inspec->system_size)){
+            $effective = self::roundTo($get_inspec->system_size,0.32);
+            if(1<=$effective && $effective<=3){
+                $tpc=$effective*480000;
+            }
+            if(4<=$effective && $effective<=6){
+                $tpc=$effective*470000;
+            }
+            if(6<$effective && $effective<=10){
+                $tpc=$effective*460000;
+            }
+            if(10<$effective){
+                $tpc=$effective*450000;
+            }
+        }
+        if(isset($get_inspec->deposit)){
+            $remaining = $tpc-($get_inspec->deposit);
+            dd($remaining);
+        } 
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if(isset($get_inspec->interest)&&isset($get_inspec->of_months)){
+            $p = $tpc-($get_inspec->down_payment);
+            $emi = $p*($get_inspec->interest)*(1+($get_inspec->interest))*($get_inspec->of_months)/((1+$get_inspec->interest)*($get_inspec->of_months)-1);
+        }
+        $inspection = DB::table('inspection')->where('id',$req->id)->update([
+                $req->name=>$req->val,
+                'system_size'=> $system_size,
+                'remaining'=>$remaining,
+                'emi'=>$emi,
+            // 'average_monthly_usage'=> $req->average_monthly_usage,
+            // 'average_sun_hours'=> $req->average_sun_hours,
+            // 'bill_offset'=> $req->bill_offset,
+            // 'potential_install_area'=> $req->potential_install_area,
+            // 'lat'=> $req->lat,
+            // 'long'=> $req->long,
+            // 'system_size'=> $system_size,
+            // 'small_leg'=>$req->small_leg,
+            // 'large_leg'=>$req->large_leg,
+            // 'number_of_rows'=>$req->number_of_rows,
+            // 'inverter_length'=>$req->inverter_length,
+            // 'deposit'=>$req->deposit,
+            // 'remaining'=>$remaining,
+            // 'down_payment'=>$req->down_payment,
+            // 'of_months'=>$req->of_months,
+            // 'interest'=>$req->interest,
+            // 'emi'=>$emi,
+            // 'existing_home'=>$req->existing_home,
+        ]);
+        
+        if(isset($get_inspec->average_monthly_usage) && isset($get_inspec->average_sun_hours)&&isset($get_inspec->lat)&&isset($get_inspec->long)&&isset($get_inspec->system_size)){
+            DB::table('inspection')->where('id',$req->id)->update(['session_1' => 1]);
+        }else{
+            DB::table('inspection')->where('id',$req->id)->update(['session_1' => 0]);
+        }
+        if(isset($get_inspec->system_size)){
+            return response()->json([
+                'system_size'=>$get_inspec->system_size,
+            ], 200);
+        }
+        return response()->json([
+            'message'=>'update ok',
+        ], 200);
+    }
 }

@@ -57,4 +57,13 @@ class UserController extends Controller
     public function site_inspection_detail(Request $req){
         return view('admin.pages.index');
     }
+    public function update_inspection_detail(Request $req){
+        $response = Curl::to(url('api/update-ispection-api'))->withData([
+            'id' => $req->id,
+            'name' => $req->name,
+            'val' => $req->val
+        ])->post();
+        $data = json_decode($response);
+        return response()->json([$data]);
+    }
 }
