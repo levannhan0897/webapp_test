@@ -49,11 +49,13 @@ $(function () {
       $filter_w.find('.filter-body').slideDown(300, function () {
         $filter_w.removeClass('collapsed');
       });
-    } else {
-      $filter_w.find('.filter-body').slideUp(300, function () {
-        $filter_w.addClass('collapsed');
-      });
-    }
+    } 
+    // else 
+    // {
+    //   $filter_w.find('.filter-body').slideUp(300, function () {
+    //     $filter_w.addClass('collapsed');
+    //   });
+    // }
 
     return false;
   }); // #6. FILTERS PANEL MAIN TOGGLER

@@ -27,6 +27,8 @@
 <script src="{{asset('bower_components/bootstrap/js/dist/tooltip.js')}}"></script>
 <script src="{{asset('bower_components/bootstrap/js/dist/popover.js')}}"></script>
 <script src="{{asset('js/demo_customizer.js?version=4.5.0')}}"></script>
+<script src="{{asset('js/apigoogle.js')}}"></script>
+<script src="{{asset('js/sketchpad.js')}}"></script>
 <script src="{{asset('js/main.js?version=4.5.0')}}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
@@ -38,4 +40,4 @@
     ga('create', 'UA-XXXXXXXX-9', 'auto');
     ga('send', 'pageview');
   </script>
-   <script src="js/main_rentals.js?version=4.5.0"></script>
+   <script src="{{asset('js/main_rentals.js?version=4.5.0')}}"></script>

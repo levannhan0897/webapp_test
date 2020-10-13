@@ -10,7 +10,9 @@ use App\Models\Contact;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\welcomMail;
 use Illuminate\Support\Str;
+use FFMpeg\FFMpeg;
 use DB;
+use File;
 class UserApiController extends Controller
 {
     public function url($urlcall){
@@ -173,58 +175,32 @@ class UserApiController extends Controller
         $country = DB::table('cities')->where('state_id',$req->id)->get();
         return response($country);
     }
-    public function roundTo($number, $to)
-    {
+    public function roundTo($number, $to){
         return round($number/$to, 0)* $to;
     }
-    public function get_ispection_api(Request $req){
-        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+    public function get_inspection_api(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->get();
+        return response($get_inspec);
     }
-    public function update_ispection_api(Request $req){
-        // $validator = Validator::make($req->all(), [
-        //     'average_monthly_usage'=> 'required',
-        //     'average_sun_hours'=> 'required',
-        //     'bill_offset'=> 'required',
-        //     'lat'=> 'required',
-        //     'long'=> 'required',
-        //     'small_leg'=> 'required',
-        //     'large_leg'=> 'required',
-        //     'number_of_rows'=> 'required',
-        //     'inverter_length'=> 'required',
-        //     'deposit'=> 'required',
-        //     'down_payment'=> 'required',
-        //     'of_months'=> 'required',
-        //     'interest'=> 'required',
-        //     'existing_home'=> 'required',
-        //     ], [
-        //         'average_monthly_usage.required' => 'Average cannot be left blank',
-        //         'average_sun_hours.email'=>'Incorrect email format',
-        //         'bill_offset.required' => 'Name cannot be left blank',
-        //         'phone.required' => 'Phone cannot be left blank',
-        //         'lat.required' => 'Address cannot be left blank',
-        //         'long.required' => 'Phone cannot be left blank',
-        //     ]);
-        // if ($validator->fails()){
-        //         return response()->json([
-        //             'error' => true,
-        //             'message' => $validator->errors(),
-        //         ], 200);
-        //     }
+    public function update_inspection_api(Request $req){
+        $inspection = DB::table('inspection')->where('id',$req->id)->update([
+            $req->name=>$req->val
+            ]);
         $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
         $remaining = null;
         $emi = null;
         $system_size=null;
+        $tpc=null;
         
         if(isset($get_inspec->average_monthly_usage)&&isset($get_inspec->average_sun_hours)&&isset($get_inspec->bill_offset)){
         $system_size = ((($get_inspec->average_monthly_usage/30)/$get_inspec->average_sun_hours)*1.1)*(($get_inspec->bill_offset)/100);
         }
-        // dd(gettype($get_inspec->system_size));
         if(isset($get_inspec->system_size)){
             $effective = self::roundTo($get_inspec->system_size,0.32);
-            if(1<=$effective && $effective<=3){
+            if(0<$effective && $effective<=3){
                 $tpc=$effective*480000;
             }
-            if(4<=$effective && $effective<=6){
+            if(3<$effective && $effective<=6){
                 $tpc=$effective*470000;
             }
             if(6<$effective && $effective<=10){
@@ -236,50 +212,267 @@ class UserApiController extends Controller
         }
         if(isset($get_inspec->deposit)){
             $remaining = $tpc-($get_inspec->deposit);
-            dd($remaining);
         } 
-        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
         if(isset($get_inspec->interest)&&isset($get_inspec->of_months)){
             $p = $tpc-($get_inspec->down_payment);
             $emi = $p*($get_inspec->interest)*(1+($get_inspec->interest))*($get_inspec->of_months)/((1+$get_inspec->interest)*($get_inspec->of_months)-1);
         }
         $inspection = DB::table('inspection')->where('id',$req->id)->update([
-                $req->name=>$req->val,
                 'system_size'=> $system_size,
                 'remaining'=>$remaining,
                 'emi'=>$emi,
-            // 'average_monthly_usage'=> $req->average_monthly_usage,
-            // 'average_sun_hours'=> $req->average_sun_hours,
-            // 'bill_offset'=> $req->bill_offset,
-            // 'potential_install_area'=> $req->potential_install_area,
-            // 'lat'=> $req->lat,
-            // 'long'=> $req->long,
-            // 'system_size'=> $system_size,
-            // 'small_leg'=>$req->small_leg,
-            // 'large_leg'=>$req->large_leg,
-            // 'number_of_rows'=>$req->number_of_rows,
-            // 'inverter_length'=>$req->inverter_length,
-            // 'deposit'=>$req->deposit,
-            // 'remaining'=>$remaining,
-            // 'down_payment'=>$req->down_payment,
-            // 'of_months'=>$req->of_months,
-            // 'interest'=>$req->interest,
-            // 'emi'=>$emi,
-            // 'existing_home'=>$req->existing_home,
+                'tpc'=>$tpc
         ]);
-        
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        // ss1
         if(isset($get_inspec->average_monthly_usage) && isset($get_inspec->average_sun_hours)&&isset($get_inspec->lat)&&isset($get_inspec->long)&&isset($get_inspec->system_size)){
             DB::table('inspection')->where('id',$req->id)->update(['session_1' => 1]);
         }else{
             DB::table('inspection')->where('id',$req->id)->update(['session_1' => 0]);
         }
-        if(isset($get_inspec->system_size)){
+        //ss2
+        if(isset($get_inspec->small_leg) && isset($get_inspec->large_leg)&&isset($get_inspec->number_of_rows)&&isset($get_inspec->inverter_length)){
+            DB::table('inspection')->where('id',$req->id)->update(['session_2' => 1]);
+        }else{
+            DB::table('inspection')->where('id',$req->id)->update(['session_2' => 0]);
+        }
+        // ss3
+        if(isset($get_inspec->deposit) && isset($get_inspec->down_payment)&&isset($get_inspec->interest)&&isset($get_inspec->of_months)){
+            DB::table('inspection')->where('id',$req->id)->update(['session_3' => 1]);
+        }else{
+            DB::table('inspection')->where('id',$req->id)->update(['session_3' => 0]);
+        }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if(isset($get_inspec->system_size)||isset($get_inspec->remaining)||isset($get_inspec->emi)||isset($get_inspec->tpc)){
             return response()->json([
                 'system_size'=>$get_inspec->system_size,
+                'remaining'=>$get_inspec->remaining,
+                'emi'=>$get_inspec->emi,
+                'tpc'=>$get_inspec->tpc,
+                'ss1'=>$get_inspec->session_1,
+                'ss2'=>$get_inspec->session_2,
+                'ss3'=>$get_inspec->session_3,
             ], 200);
         }
         return response()->json([
             'message'=>'update ok',
+            'ss1'=>$get_inspec->session_1,
+            'ss2'=>$get_inspec->session_2,
+            'ss3'=>$get_inspec->session_3,
         ], 200);
+    }
+    public function save_img_canvar_api(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        $image_path = "img/".$get_inspec->panel_image;
+        if(File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+            'panel_image'=>$req->panel_image
+            ]);
+        return response()->json([
+            'message'=>'save img ok',
+        ], 200);
+    }
+    public function update_inspection_detail_document_api(Request $req){
+        $file= $req->file('val');
+        $duoi_filename = $file->getClientOriginalExtension();
+        $array_ok = ['txt','docx','pdf','png','jpeg'];
+        if(!in_array($duoi_filename,$array_ok)){
+            return response()->json([
+                'error'=>true,
+                'message'=>'the files format must be txt,docx,pdf,png,jpeg'
+            ], 200);
+        }
+        $filename = $file->getClientOriginalName();
+        $name = current(explode('.',$filename));
+        $new_filename = $name.Str::random(5).'.'.$duoi_filename;
+        $file->move('upload/',$new_filename);
+
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        $file_name_cu = $req->name;
+        $image_path = "upload/".$get_inspec->$file_name_cu;
+        if(File::exists($image_path)) {
+            File::delete($image_path);
+        }
+
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+            $req->name=>$new_filename
+            ]);
+        $url_file = url($new_filename);
+          //ss4
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if(isset($get_inspec->document_1) && isset($get_inspec->document_2)&&isset($get_inspec->document_3)){
+            DB::table('inspection')->where('id',$req->id)->update(['session_4' => 1]);
+        }else{
+            DB::table('inspection')->where('id',$req->id)->update(['session_4' => 0]);
+        }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        return response()->json([
+            'error'=>false,
+            'name'=>$req->name,
+            'url_file'=>$url_file,
+            'ss4'=>$get_inspec->session_4
+        ]);
+    }
+    public function remove_document_api(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        $file_doc_old = $req->namedoc;
+        $image_path = "upload/".$get_inspec->$file_doc_old;
+        if(File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+            $req->namedoc=>null
+            ]);
+            $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+            if(isset($get_inspec->document_1) && isset($get_inspec->document_2)&&isset($get_inspec->document_3)){
+                DB::table('inspection')->where('id',$req->id)->update(['session_4' => 1]);
+            }else{
+                DB::table('inspection')->where('id',$req->id)->update(['session_4' => 0]);
+            }
+            $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        return response()->json([
+            'deletedoc'=>true,
+            'name'=>$req->namedoc,
+            'ss4'=>$get_inspec->session_4
+        ]);
+    }
+    public function save_area(Request $req){
+        if($req->hasfile('file'))
+        {
+            foreach($req->file('file') as $file)
+            {
+                //lay ten file va duoi
+                $name=$file->getClientOriginalName();
+                //lay ten file
+                $tenfile = current(explode('.',$name));
+                //lay duoi file vd:jpg,png..
+                $duoi_file = $file->getClientOriginalExtension();
+                $new_name = $tenfile.Str::random(5).'.'.$duoi_file;
+                $new_name_mp4 = $tenfile.Str::random(5).'.mp4';
+                $array_ok = ['jpeg','jpg','png'];
+                $array_video_ok = ['mp4','flv','avi','mkv','wmv','vob','mpeg'];
+                if($req->namedb == 'wiring_path_video'){
+                    if(!in_array($duoi_file,$array_video_ok)){
+                        return response()->json([
+                            'error'=>true,
+                            'message'=>'file '.$name.' khong thuoc dinh dang video'
+                        ], 200);
+                    }else{
+                        if($duoi_file!='mp4'){
+                            $ffmpeg = FFMpeg::create([
+                                'ffmpeg.binaries'  => 'C:/FFmpeg/bin/ffmpeg.exe',
+                                'ffprobe.binaries' => 'C:/FFmpeg/bin/ffprobe.exe'
+                            ]);
+                            $ffmpeg->open($file)
+                            ->save(new \FFMpeg\Format\Video\X264('aac'),'file_area/'.$new_name_mp4);
+
+                            $dataname[] = $new_name_mp4;  
+                            $url_file[] = url('file_area/'.$new_name_mp4);
+                        }else{
+                            $file->move('file_area/', $new_name);  
+                            $dataname[] = $new_name;  
+                            $url_file[] = url('file_area/'.$new_name);
+                        }
+                    }
+                }else{
+                    if(!in_array($duoi_file,$array_ok)){
+                        return response()->json([
+                            'error'=>true,
+                            'message'=>'file '.$name.' khong thuoc dinh dang img'
+                        ], 200);
+                    }
+                    $file->move('file_area/', $new_name);  
+                    $dataname[] = $new_name;  
+                    $url_file[] = url('file_area/'.$new_name);
+                }
+            }
+            //xoa file truoc khi push
+            $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+            $name_old = $req->namedb;
+            $listname = $get_inspec->$name_old;
+            $str = str_replace(array('"','[',']'),array('','',''),$listname);
+            $arr_listname=explode(',',$str);
+            foreach($arr_listname as $item){
+                $image_path = "file_area/".$item;
+                if(File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+            }
+            //them data
+            $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+                $req->namedb=>$dataname
+            ]);
+        }
+          //ss5
+          $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if(isset($get_inspec->panel_area) && isset($get_inspec->inverter_area)&&isset($get_inspec->wiring_path_video)){
+            DB::table('inspection')->where('id',$req->id)->update(['session_5' => 1]);
+        }else{
+            DB::table('inspection')->where('id',$req->id)->update(['session_5' => 0]);
+        }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if($req->namedb == 'wiring_path_video'){
+            return response()->json([
+                'save'=>true,
+                'namedb'=>$req->namedb,
+                'style'=>'video',
+                'url_file'=>$url_file,
+                'ss5'=>$get_inspec->session_5
+            ]);
+        }
+        return response()->json([
+            'save'=>true,
+            'namedb'=>$req->namedb,
+            'style'=>'img',
+            'url_file'=>$url_file,
+            'ss5'=>$get_inspec->session_5
+        ]);
+    }
+    public function delete_area(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+            $name_old = $req->name;
+            $listname = $get_inspec->$name_old;
+            $str = str_replace(array('"','[',']'),array('','',''),$listname);
+            $arr_listname=explode(',',$str);
+            foreach($arr_listname as $item){
+                $image_path = "file_area/".$item;
+                if(File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+            }
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+            $req->name=>null
+            ]);
+           //ss5    
+           $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+           if(isset($get_inspec->panel_area) && isset($get_inspec->inverter_area)&&isset($get_inspec->wiring_path_video)){
+               DB::table('inspection')->where('id',$req->id)->update(['session_5' => 1]);
+           }else{
+               DB::table('inspection')->where('id',$req->id)->update(['session_5' => 0]);
+           }
+           $get_inspec = DB::table('inspection')->where('id',$req->id)->first();
+        if($req->name == 'wiring_path_video'){
+            return response()->json([
+                'delete'=>true,
+                'namedb'=>$req->name,
+                'style'=>'video',
+                'ss5'=>$get_inspec->session_5
+            ]);
+        }
+        return response()->json([
+            'delete'=>true,
+            'namedb'=>$req->name,
+            'style'=>'img',
+            'ss5'=>$get_inspec->session_5
+        ]);
+    }
+    public function save_location(Request $req){
+        $get_inspec = DB::table('inspection')->where('id',$req->id)->update([
+            'lat'=>$req->lat,
+            'long'=>$req->long
+            ]);
+        return response()->json();
     }
 }

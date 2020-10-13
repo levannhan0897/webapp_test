@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\welcomMail;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -58,12 +60,37 @@ class UserController extends Controller
         return view('admin.pages.index');
     }
     public function update_inspection_detail(Request $req){
-        $response = Curl::to(url('api/update-ispection-api'))->withData([
+        $response = Curl::to(url('api/update-inspection-api'))->withData([
             'id' => $req->id,
             'name' => $req->name,
             'val' => $req->val
         ])->post();
         $data = json_decode($response);
         return response()->json([$data]);
+    }
+    public function get_inspection_detail(Request $req){
+        $response = Curl::to(url('api/get-inspection-api'))->withData([
+            'id' => $req->id,
+        ])->get();
+        $data = json_decode($response);
+        return view('admin.pages.index')->with('data',$data);
+    }
+    public function show_list_inspec(Request $req){
+        return view('admin.pages.list-inspec');
+    }
+    public function save_img_canvar(Request $req){
+        $img = $req->imgBase64;
+        $img = str_replace('data:image/png;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $fileData = base64_decode($img);
+        //saving
+        $filename = 'img-canvar';
+        $new_filename = $filename.Str::random(5).'.png';
+        file_put_contents('img/'.$new_filename, $fileData);
+        $response = Curl::to(url('api/save-img-canvar-api'))->withData([
+            'id'=>$req->id,
+            'panel_image' => $new_filename,
+        ])->post();
+        return response()->json();
     }
 }
