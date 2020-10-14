@@ -7,21 +7,21 @@
             <span>Menu</span>
         </li>
         <li class="selected has-sub-menu">
-            <a href="index.html">
+            <a href="{{asset('/admin/index')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layout"></div>
                 </div>
                 <span>Dashboard</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="{{asset("/admin/sale/dasboard")}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
                 <span>(S&C) Dasboard</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="#">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
@@ -36,47 +36,45 @@
                 <div class="sub-menu-i">
                     <ul class="sub-menu">
                         <li>
-                            <a href="layouts_menu_side_full.html">Customer</a>
+                            <a href="{{asset('/admin/customer/list')}}">Customer</a>
                         </li>
                         <li>
-                            <a href="layouts_menu_side_full_dark.html">S&C</a>
+                            <a href="{{asset('/admin/saler/list')}}">S&C</a>
                         </li>
                         <li>
-                            <a href="layouts_menu_side_transparent.html">Installs<strong class="badge badge-danger">New</strong></a>
+                            <a href="{{asset('/admin/installer/list')}}">Installs<strong class="badge badge-danger">New</strong></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="{{asset('admin/sale/get-contact')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
                 <span>S&C Visit Confirmation</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="{{asset('admin/sale/list-potential')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
                 <span>Potentials</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="{{asset('admin/sale/list-project')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
                 <span>Projects</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="layouts_menu_top_image.html">
+            <a href="{{asset('admin/sale/list-inspection')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
                 <span>Site Inspections</span></a>
         </li>
-
-
     </ul>
 </div>
