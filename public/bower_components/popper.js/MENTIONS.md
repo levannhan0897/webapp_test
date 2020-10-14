@@ -48,7 +48,7 @@ Simple Vue.js component for Popper.js.
 
 ### [vue-popperjs](https://github.com/RobinCK/vue-popper) 
 
-VueJS 2.x popover component based [popper.js](https://popper.js.org/)
+VueJS 2.x popover component based [popper.min.js](https://popper.js.org/)
 
 ### [vue-directive-tooltip](https://www.npmjs.com/package/vue-directive-tooltip)
 

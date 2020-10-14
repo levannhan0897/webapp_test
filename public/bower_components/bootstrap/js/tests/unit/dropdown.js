@@ -1482,7 +1482,7 @@ $(function () {
     assert.ok(typeof offset.fn === 'undefined')
   })
 
-  QUnit.test('should allow to pass config to popper.js with `popperConfig`', function (assert) {
+  QUnit.test('should allow to pass config to popper.min.js with `popperConfig`', function (assert) {
     assert.expect(1)
 
     var dropdownHTML =

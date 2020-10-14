@@ -27,13 +27,16 @@
 <script src="{{asset('bower_components/bootstrap/js/dist/tooltip.js')}}"></script>
 <script src="{{asset('bower_components/bootstrap/js/dist/popover.js')}}"></script>
 <script src="{{asset('js/demo_customizer.js?version=4.5.0')}}"></script>
+<script src="{{asset('js/sketchpad.js')}}"></script>
 <script src="{{asset('js/main.js?version=4.5.0')}}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src="asset(g;m.parentNode.insertBefore(a,m)
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-XXXXXXXX-9', 'auto');
     ga('send', 'pageview');
 </script>
+<script src="{{asset('js/main_rentals.js?version=4.5.0')}}"></script>

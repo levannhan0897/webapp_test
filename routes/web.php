@@ -13,6 +13,55 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\AdminPageController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Saler;
+use App\Http\Controllers\Installer;
+use App\Http\Controllers\Customer;
+use App\Http\Controllers\MailController;
+
 Route::get('/', function () {
     return view('welcome');
 });
+//Route::get('test', [ForgotPasswordController::class, 'test']);
+Route::post('admin/newPass', [ForgotPasswordController::class, 'newPass'])->name('newPass');
+Route::get('admin/newPass', [ForgotPasswordController::class, 'newPassIndex']);
+Route::get('resetPassword/{token}', [ForgotPasswordController::class, 'resetPassword']);
+Route::post('forgotPassword', [ForgotPasswordController::class, 'getForgotPassword'])->name('forgotPassword');
+Route::get('forgotPassword', [ForgotPasswordController::class, 'getForgotPasswordIndex']);
+Route::get('forgot', [ForgotPasswordController::class, 'index'])->name('forgot');
+Route::get('admin/login', [AdminPageController::class, 'login']);
+Route::get('admin/register', [AdminPageController::class, 'register']);
+Route::post('admin/login', [AdminPageController::class, 'postLogin'])->name('postLogin');
+//mail
+Route::get('mail/send', [MailController::class, 'send'])->name('sendEmail');
+//user
+    Route::get('user/detail/{id}', [Saler::class, 'getDetailUser']);
+    Route::post('user/edit/{id}', [Saler::class, 'getEditUser'])->name('editUser');
+//Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function () {
+    Route::get('admin/index', [AdminPageController::class, 'index']);
+    Route::get('/admin/logout', [AdminPageController::class, 'logout']);
+    Route::get('admin/contact', [AdminPageController::class, 'contact']);
+
+//    Route::group(['prefix' => 'sale'], function () {
+        Route::get('test', [Saler::class, 'getListUser']);
+        Route::get('admin/sale/list', [Saler::class, 'index'])->name('saler');
+        Route::get('admin/sale/get-contact', [Saler::class, 'getContact']);
+        Route::get('admin/sale/dasboard', [Saler::class, 'getDasboard']);
+        Route::get('admin/sale/list-inspection', [Saler::class, 'getListInspection']);
+        Route::get('admin/sale/list-potential', [Saler::class, 'getListPotentials']);
+        Route::get('admin/sale/list-project', [Saler::class, 'getListProject']);
+//    });
+//    Route::group(['prefix' => 'installer'], function () {
+        Route::get('admin/installer/list', [Installer::class, 'index'])->name('installer');
+//    });
+//    Route::group(['prefix' => 'customer'], function () {
+        Route::get('admin/customer/list', [Customer::class, 'index'])->name('customer');
+//    });
+//}
+//);
+
+
+
+
+

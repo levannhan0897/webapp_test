@@ -7,17 +7,17 @@
 </p>
 
 <p align="center">
-    <img src="https://badge-size.now.sh/https://unpkg.com/popper.js/dist/popper.min.js?compression=brotli" alt="Stable Release Size"/>
-  <img src="https://badge-size.now.sh/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
-    <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
-    <a href="https://www.npmjs.com/browse/depended/popper.js"><img src="https://badgen.net/npm/dependents/popper.js" alt="Dependents packages" /></a>
+    <img src="https://badge-size.now.sh/https://unpkg.com/popper.min.js/dist/popper.min.js?compression=brotli" alt="Stable Release Size"/>
+  <img src="https://badge-size.now.sh/https://unpkg.com/popper.min.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
+    <a href="https://codeclimate.com/github/FezVrasta/popper.min.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.min.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
+    <a href="https://www.npmjs.com/browse/depended/popper.min.js"><img src="https://badgen.net/npm/dependents/popper.min.js" alt="Dependents packages" /></a>
     <a href="https://spectrum.chat/popper-js" target="_blank"><img src="https://img.shields.io/badge/chat-on_spectrum-6833F9.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTAgOCI%2BPGRlZnM%2BPHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fTwvc3R5bGU%2BPC9kZWZzPjx0aXRsZT5zcGVjdHJ1bTwvdGl0bGU%2BPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNSwwQy40MiwwLDAsLjYzLDAsMy4zNGMwLDEuODQuMTksMi43MiwxLjc0LDMuMWgwVjcuNThhLjQ0LjQ0LDAsMCwwLC42OC4zNUw0LjM1LDYuNjlINWM0LjU4LDAsNS0uNjMsNS0zLjM1UzkuNTgsMCw1LDBaTTIuODMsNC4xOGEuNjMuNjMsMCwxLDEsLjY1LS42M0EuNjQuNjQsMCwwLDEsMi44Myw0LjE4Wk01LDQuMThhLjYzLjYzLDAsMSwxLC42NS0uNjNBLjY0LjY0LDAsMCwxLDUsNC4xOFptMi4xNywwYS42My42MywwLDEsMSwuNjUtLjYzQS42NC42NCwwLDAsMSw3LjE3LDQuMThaIi8%2BPC9zdmc%2B" alt="Get support or discuss"/></a>
     <br />
-    <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" alt="Build Status"/></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.min.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.min.js.svg?branch=master" alt="Build Status"/></a>
     <a href="https://saucelabs.com/u/popperjs" target="_blank"><img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&iexplore=11,10&safari=latest" alt="SauceLabs Reports"/></a>
 </p>
 
-<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
+<img src="https://raw.githubusercontent.com/FezVrasta/popper.min.js/master/popperjs.png" align="right" width=250 />
 
 <!-- 🚨 HEY! HERE BEGINS THE INTERESTING STUFF 🚨 -->
 
@@ -72,11 +72,11 @@ Popper.js is available on the following package managers and CDNs:
 
 | Source          |                                                                                                            |
 | :-------------- | :--------------------------------------------------------------------------------------------------------- |
-| npm             | `npm install popper.js --save`                                                                             |
-| yarn            | `yarn add popper.js`                                                                                       |
-| NuGet           | `PM> Install-Package popper.js`                                                                            |
-| Bower           | `bower install popper.js --save`                                                                           |
-| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                               
+| npm             | `npm install popper.min.js --save`                                                                             |
+| yarn            | `yarn add popper.min.js`                                                                                       |
+| NuGet           | `PM> Install-Package popper.min.js`                                                                            |
+| Bower           | `bower install popper.min.js --save`                                                                           |
+| unpkg           | [`https://unpkg.com/popper.min.js`](https://unpkg.com/popper.js)                                               
 
 Tooltip.js as well:
 
@@ -100,7 +100,7 @@ Have no idea what am I talking about? You are looking for UMD probably.
 - ESNext: Available in `/dist`, can be used with webpack and `babel-preset-env`;
 
 Make sure to use the right one for your needs. **If you want to import it with a `<script>` tag, use UMD.**  
-If you can't find the `/dist` folder in the Git repository, this is because the distribution files are shipped only to Bower, npm or our CDNs. You can still find them visiting `https://unpkg.com/popper.js/dist/` (or `https://unpkg.com/tooltip.js/dist/`)
+If you can't find the `/dist` folder in the Git repository, this is because the distribution files are shipped only to Bower, npm or our CDNs. You can still find them visiting `https://unpkg.com/popper.min.js/dist/` (or `https://unpkg.com/tooltip.js/dist/`)
 
 ## Usage
 
@@ -186,10 +186,10 @@ new Popper(reference, popper, {
 
 It is recommended that users mock Popper.js for use in Jest tests due to some limitations of JSDOM.
 
-The simplest way to mock Popper.js is to place the following code in `__mocks__/popper.js.js` adjacent to your `node_modules` directory. Jest will pick it up automatically.
+The simplest way to mock Popper.js is to place the following code in `__mocks__/popper.min.js.js` adjacent to your `node_modules` directory. Jest will pick it up automatically.
 
 ```js
-import PopperJs from 'popper.js';
+import PopperJs from 'popper.min.js';
 
 export default class Popper {
   static placements = PopperJs.placements;
@@ -206,8 +206,8 @@ export default class Popper {
 Alternatively, you can manually mock Popper.js for a particular test.
 
 ```js
-jest.mock('popper.js', () => {
-  const PopperJS = jest.requireActual('popper.js');
+jest.mock('popper.min.js', () => {
+  const PopperJS = jest.requireActual('popper.min.js');
 
   return class Popper {
     static placements = PopperJS.placements;
@@ -227,7 +227,7 @@ jest.mock('popper.js', () => {
 Since the API changed, we prepared some migration instructions to make it easy to upgrade to
 Popper.js v1.
 
-https://github.com/FezVrasta/popper.js/issues/62
+https://github.com/FezVrasta/popper.min.js/issues/62
 
 Feel free to comment inside the issue if you have any questions.
 

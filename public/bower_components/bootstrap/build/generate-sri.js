@@ -44,7 +44,7 @@ const files = [
     configPropertyName: 'jquery_hash'
   },
   {
-    file: 'node_modules/popper.js/dist/umd/popper.min.js',
+    file: 'node_modules/popper.js/dist/umd/popper.js',
     configPropertyName: 'popper_hash'
   }
 ]

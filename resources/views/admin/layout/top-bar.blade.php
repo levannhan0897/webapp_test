@@ -1,6 +1,6 @@
 <div class="top-bar color-scheme-bright">
     <div class="logo-w menu-size">
-        <a class="logo" href="index.html">
+        <a class="logo" href="{{asset("/admin/index")}}">
             <div class="logo-element"></div>
             <div class="logo-label">
                 Clean Admin
@@ -229,7 +229,7 @@
                             <a href="#"><i class="os-icon os-icon-others-43"></i><span>Notifications</span></a>
                         </li>
                         <li>
-                            <a href="logout"><i class="os-icon os-icon-signs-11"></i><span>Logout</span></a>
+                            <a href="{{asset('admin/login')}}"><i class="os-icon os-icon-signs-11"></i><span>Logout</span></a>
                         </li>
                     </ul>
                 </div>

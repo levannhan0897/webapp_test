@@ -35,8 +35,8 @@ Create a new Tooltip.js instance
 | options.title | <code>String</code> \| <code>HTMLElement</code> \| <code>TitleFunction</code> | <code>&#x27;&#x27;</code> | Default title value if `title` attribute isn't present. |
 | [options.trigger] | <code>String</code> | <code>&#x27;hover focus&#x27;</code> | How tooltip is triggered - click, hover, focus, manual.      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger. |
 | options.closeOnClickOutside | <code>Boolean</code> | <code>false</code> | Close a popper on click outside of the popper and reference element. This has effect only when options.trigger is 'click'. |
-| options.boundariesElement | <code>String</code> \| <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
-| options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/popper-documentation.html) |
+| options.boundariesElement | <code>String</code> \| <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.min.js.org/popper-documentation.html) |
+| options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.min.js.org/popper-documentation.html) |
 | options.popperOptions | <code>Object</code> | <code>{}</code> | Popper options, will be passed directly to popper instance. For more information refer to Popper.js'      [options docs](https://popper.js.org/popper-documentation.html) |
 
 <a name="Tooltip+show"></a>

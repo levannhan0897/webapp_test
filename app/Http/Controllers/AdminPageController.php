@@ -17,14 +17,12 @@ class AdminPageController extends Controller
     }
     public function logout(){
         Auth::logout();
-        return redirect('admin/login');
+        return redirect('/admin/login');
     }
     public function contact(){
         return view('admin.pages.contact');
     }
-    public function getContact(){
-        return view('admin.pages.get-contact');
-    }
+
     public function register(){
         return view('admin.pages.register');
     }

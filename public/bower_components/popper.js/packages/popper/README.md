@@ -7,17 +7,17 @@
 </p>
 
 <p align="center">
-    <img src="http://badge-size.now.sh/https://unpkg.com/popper.js/dist/popper.min.js?compression=brotli" alt="Stable Release Size"/>
-  <img src="http://badge-size.now.sh/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
-    <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
-    <a href="https://www.npmjs.com/browse/depended/popper.js"><img src="https://badgen.net/npm/dependents/popper.js" alt="Dependents packages" /></a>
+    <img src="http://badge-size.now.sh/https://unpkg.com/popper.min.js/dist/popper.min.js?compression=brotli" alt="Stable Release Size"/>
+  <img src="http://badge-size.now.sh/https://unpkg.com/popper.min.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
+    <a href="https://codeclimate.com/github/FezVrasta/popper.min.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.min.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
+    <a href="https://www.npmjs.com/browse/depended/popper.min.js"><img src="https://badgen.net/npm/dependents/popper.min.js" alt="Dependents packages" /></a>
     <a href="https://spectrum.chat/popper-js" target="_blank"><img src="https://img.shields.io/badge/chat-on_spectrum-6833F9.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTAgOCI%2BPGRlZnM%2BPHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fTwvc3R5bGU%2BPC9kZWZzPjx0aXRsZT5zcGVjdHJ1bTwvdGl0bGU%2BPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNSwwQy40MiwwLDAsLjYzLDAsMy4zNGMwLDEuODQuMTksMi43MiwxLjc0LDMuMWgwVjcuNThhLjQ0LjQ0LDAsMCwwLC42OC4zNUw0LjM1LDYuNjlINWM0LjU4LDAsNS0uNjMsNS0zLjM1UzkuNTgsMCw1LDBaTTIuODMsNC4xOGEuNjMuNjMsMCwxLDEsLjY1LS42M0EuNjQuNjQsMCwwLDEsMi44Myw0LjE4Wk01LDQuMThhLjYzLjYzLDAsMSwxLC42NS0uNjNBLjY0LjY0LDAsMCwxLDUsNC4xOFptMi4xNywwYS42My42MywwLDEsMSwuNjUtLjYzQS42NC42NCwwLDAsMSw3LjE3LDQuMThaIi8%2BPC9zdmc%2B" alt="Get support or discuss"/></a>
     <br />
-    <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" alt="Build Status"/></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.min.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.min.js.svg?branch=master" alt="Build Status"/></a>
     <a href="https://saucelabs.com/u/popperjs" target="_blank"><img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&iexplore=11,10&safari=latest" alt="SauceLabs Reports"/></a>
 </p>
 
-<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
+<img src="https://raw.githubusercontent.com/FezVrasta/popper.min.js/master/popperjs.png" align="right" width=250 />
 
 <!-- 🚨 HEY! HERE BEGINS THE INTERESTING STUFF 🚨 -->
 
@@ -74,12 +74,12 @@ Popper.js is available on the following package managers and CDNs:
 
 | Source |                                                                                  |
 |:-------|:---------------------------------------------------------------------------------|
-| npm    | `npm install popper.js --save`                                                   |
-| yarn   | `yarn add popper.js`                                                             |
-| NuGet  | `PM> Install-Package popper.js`                                                  |
-| Bower  | `bower install popper.js --save`                     |
-| unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
-| cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
+| npm    | `npm install popper.min.js --save`                                                   |
+| yarn   | `yarn add popper.min.js`                                                             |
+| NuGet  | `PM> Install-Package popper.min.js`                                                  |
+| Bower  | `bower install popper.min.js --save`                     |
+| unpkg  | [`https://unpkg.com/popper.min.js`](https://unpkg.com/popper.js)                     |
+| cdnjs  | [`https://cdnjs.com/libraries/popper.min.js`](https://cdnjs.com/libraries/popper.js) |
 
 Tooltip.js as well:
 
@@ -89,7 +89,7 @@ Tooltip.js as well:
 | yarn   | `yarn add tooltip.js`                                                            |
 | Bower* | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                   |
 | unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                   |
-| cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
+| cdnjs  | [`https://cdnjs.com/libraries/popper.min.js`](https://cdnjs.com/libraries/popper.js) |
 
 \*: Bower isn't officially supported, it can be used to install Tooltip.js only trough the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggests to use npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
@@ -187,7 +187,7 @@ new Popper(reference, popper, {
 Since the API changed, we prepared some migration instructions to make it easy to upgrade to
 Popper.js v1.  
 
-https://github.com/FezVrasta/popper.js/issues/62
+https://github.com/FezVrasta/popper.min.js/issues/62
 
 Feel free to comment inside the issue if you have any questions.
 

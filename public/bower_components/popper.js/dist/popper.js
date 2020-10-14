@@ -2419,7 +2419,7 @@ class Popper {
   /**
    * Collection of utilities useful when writing custom modifiers.
    * Starting from version 1.7, this method is available only if you
-   * include `popper-utils.js` before `popper.js`.
+   * include `popper-utils.js` before `popper.min.js`.
    *
    * **DEPRECATION**: This way to access PopperUtils is deprecated
    * and will be removed in v2! Use the PopperUtils module directly instead.
@@ -2459,4 +2459,4 @@ Popper.placements = placements;
 Popper.Defaults = Defaults;
 
 export default Popper;
-//# sourceMappingURL=popper.js.map
+//# sourceMappingURL=popper.min.js.map
