@@ -28,6 +28,21 @@ Route::post('/update-inspection-detail',[UserController::class,'update_inspectio
 Route::get('/get-inspection-detail/{id}',[UserController::class,'get_inspection_detail']);
 Route::get('/show-list-inspec',[UserController::class,'show_list_inspec']);
 Route::post('/save-img-canvar',[UserController::class,'save_img_canvar']);
+Route::get('/get-potentials-list',[UserController::class,'get_potentials_list']);
+Route::get('/detail-potentials/{id}',[UserController::class,'detail_potentials']);
+Route::get('/show-page-install',[UserController::class,'show_page_install']);
+Route::get('/show-page-add-install',[UserController::class,'show_page_add_install']);
+Route::post('/add-install',[UserController::class,'add_install']);
+Route::get('/show-page-edit-install/{id}',[UserController::class,'show_page_edit_install']);
+Route::post('/update-install',[UserController::class,'update_install']);
+Route::get('/list-customer',[UserController::class,'list_customer']);
+Route::get('/list-sale',[UserController::class,'list_sale']);
+Route::get('/show-page-add-sale',[UserController::class,'show_page_add_sale']);
+Route::post('/add-user-sale',[UserController::class,'add_user_sale']);
+Route::get('/show-page-update-user-sale/{id}',[UserController::class,'show_page_update_user_sale']);
+Route::post('/update-user-sale',[UserController::class,'update_user_sale']);
+Route::post('/update-user-contact',[UserController::class,'update_user_contact']);
+Route::get('/show-page-dashboard-sale',[UserController::class,'show_page_dashboard_sale']);
 
 ///
 //Route::get('test', [ForgotPasswordController::class, 'test']);
@@ -55,15 +70,4 @@ Route::get('mail/send', [MailController::class, 'send'])->name('sendEmail');
         Route::get('admin/sale/list', [Saler::class, 'index'])->name('saler');
         Route::get('admin/sale/get-contact', [Saler::class, 'getContact']);
         Route::get('admin/sale/dasboard', [Saler::class, 'getDasboard']);
-        Route::get('admin/sale/list-inspection', [Saler::class, 'getListInspection']);
-        Route::get('admin/sale/list-potential', [Saler::class, 'getListPotentials']);
         Route::get('admin/sale/list-project', [Saler::class, 'getListProject']);
-//    });
-//    Route::group(['prefix' => 'installer'], function () {
-        Route::get('admin/installer/list', [Installer::class, 'index'])->name('installer');
-//    });
-//    Route::group(['prefix' => 'customer'], function () {
-        Route::get('admin/customer/list', [Customer::class, 'index'])->name('customer');
-//    });
-//}
-//);

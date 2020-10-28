@@ -40,6 +40,22 @@ Route::post('/remove-document-api',[UserApiController::class,'remove_document_ap
 Route::post('/save-area',[UserApiController::class,'save_area']);
 Route::post('/delete-area',[UserApiController::class,'delete_area']);
 Route::post('/save-location',[UserApiController::class,'save_location']);
+Route::get('/get-list-inspec',[UserApiController::class,'get_list_inspec']);
+Route::get('/get-potentials-list-api',[UserApiController::class,'get_potentials_list_api']);
+Route::get('/get-detail-potentials-api/{id}',[UserApiController::class,'get_detail_potentials_api']);
+Route::post('/update-status-potentials-api',[UserApiController::class,'update_status_potentials_api']);
+Route::post('/add-install-api',[UserApiController::class,'add_install_api']);
+Route::get('/get-list-install-api',[UserApiController::class,'get_list_install_api']);
+Route::post('/delete-install-api',[UserApiController::class,'delete_install_api']);
+Route::get('/get-install-by-id-api/{id}',[UserApiController::class,'get_install_by_id_api']);
+Route::post('/update-install-api',[UserApiController::class,'update_install_api']);
+Route::get('/get-contact-api',[UserApiController::class,'get_contact_api']);
+Route::get('/get-list-sale-api',[UserApiController::class,'get_list_sale_api']);
+Route::post('/add-user-sale-api',[UserApiController::class,'add_user_sale_api']);
+Route::post('/delete-sale-api',[UserApiController::class,'delete_sale_api']);
+Route::get('/get-data-contact',[UserApiController::class,'get_data_contact']);
+Route::post('/update-user-contact-api',[UserApiController::class,'update_user_contact_api']);
+Route::get('/get-bank-api',[UserApiController::class,'get_bank_api']);
 //////////////////////////
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

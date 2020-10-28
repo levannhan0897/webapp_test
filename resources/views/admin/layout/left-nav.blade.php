@@ -14,7 +14,7 @@
                 <span>Dashboard</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="{{asset("/admin/sale/dasboard")}}">
+            <a href="{{asset("/show-page-dashboard-sale")}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
@@ -36,13 +36,13 @@
                 <div class="sub-menu-i">
                     <ul class="sub-menu">
                         <li>
-                            <a href="{{asset('/admin/customer/list')}}">Customer</a>
+                            <a href="{{asset('/list-customer')}}">Customer</a>
                         </li>
                         <li>
-                            <a href="{{asset('/admin/saler/list')}}">S&C</a>
+                            <a href="{{asset('/list-sale')}}">S&C</a>
                         </li>
                         <li>
-                            <a href="{{asset('/admin/installer/list')}}">Installs<strong class="badge badge-danger">New</strong></a>
+                            <a href="{{asset('/show-page-install')}}">Installs</a>
                         </li>
                     </ul>
                 </div>
@@ -56,7 +56,7 @@
                 <span>S&C Visit Confirmation</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="{{asset('admin/sale/list-potential')}}">
+            <a href="{{asset('/get-potentials-list')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>
@@ -70,7 +70,7 @@
                 <span>Projects</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="{{asset('admin/sale/list-inspection')}}">
+            <a href="{{asset('/show-list-inspec')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>

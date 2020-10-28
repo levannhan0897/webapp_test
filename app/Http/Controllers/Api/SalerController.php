@@ -22,11 +22,9 @@ class SalerController extends Controller
         $user->save();
         return $user;
     }
-    public function getDetailUser(Request $request, $id)
+    public function getDetailUser(Request $req)
     {
-        $user = User::find($id);
+        $user =  DB::table('contact')->where('id',$req->id)->get();
         return $user;
     }
-
-
 }

@@ -1,26 +1,50 @@
 @extends('admin.layout.index')
 @section('content')
-    <div class="content-w">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="index.html">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="index.html">Products</a>
-            </li>
-            <li class="breadcrumb-item">
-                <span>Laptop with retina screen</span>
-            </li>
-        </ul>
-        <!--------------------
-        END - Breadcrumbs
-        -------------------->
+<style>
+    .step{
+    display: none !important;
+    }
+    .step.active{
+        display: block !important;
+    }
+    .hr.active{
+        display: block !important;
+    }
+    .hr{
+        display: none !important;
+    }
+    .right-retals{
+        position: absolute !important;
+        right: -160px !important;
+        top: 15px !important;
+    }
+    .filter-w{
+        position: relative !important;
+    }
+    
+    input[type="checkbox"][readonly] {
+        pointer-events: none !important;
+    }
+    </style>
         <div class="content-i">
             <div class="content-box">
                 <div class="element-wrapper">
                     <h6 class="element-header">
                         Data Tables
                     </h6>
+                    <?php
+                    $message = Session::get('message');
+                    $status = Session::get('status');   
+                    if($status == 1 && $message) {
+                    $mess = json_encode($message);
+                    echo " <div class='alert alert-success text-center'>".$mess." </div>";
+                    Session::put('message',null);
+                    }elseif($status == 0 &&$message){
+                    $mess = json_encode($message);
+                    echo " <div class='alert alert-danger text-center'>".$mess." </div>";
+                    Session::put('message',null);
+                    }
+                    ?>
                     <div class="element-box">
                         <div aria-labelledby="exampleModalLabel" id="exampleModal"
                              class="modal fade bd-example-modal-lg" role="dialog" tabindex="-1" aria-modal="true"
@@ -35,19 +59,20 @@
                                             <span aria-hidden="true"> ×</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form>
-                                            <input id="token" type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <form action="{{asset('./update-user-contact')}}" method="POST">
+                                            @csrf
+                                            <input type="text" value="" name="idcontact" id="id-contact" style="display: none">
                                             <div class="row">
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for=""> Create At</label>
-                                                        <p id="createAt">20/10</p>
+                                                        <p id="createAt"></p>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="">Name</label>
-                                                        <p id="name">Hoangtrung</p>
+                                                        <p id="name"></p>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
@@ -55,36 +80,36 @@
                                                         <label for="visit">Visit date and time: </label>
                                                         <input id="scheduleDate" type="datetime-local" value=""
                                                                name="scheduleDate">
-                                                        {{--<input id="scheduleDate" class="form-control"  type="text" value="" name="scheduleDate">--}}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <p>Phone Number:010202020</p>
+                                                    <p>Phone Number: <span id="phone"></span> </p>
                                                     <span>Email:</span>
-                                                    <p id="email"> xddxx@gmail.com</p>
-                                                    <p>Yearly Electricity Usage in kWh: 1 Year</p>
-                                                    <p>Pincode: 342311</p>
+                                                    <p id="email"></p>
+                                                    <p>Yearly Electricity Usage in kWh: <span id="contact_meu"></span>
+                                                    </p>
+                                                    <p>Pincode: <span id="contact_pincode"></span> </p>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="">Address 1</label>
                                                         <input class="form-control" id="address1" type="text"
-                                                               placeholder="" value="Ha noi" name="address1">
+                                                               placeholder="" value="" name="address1">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">Address 2</label>
                                                         <input class="form-control" type="text" placeholder=""
-                                                               value="Ha noi" name="address2">
+                                                        id="address2" value="" name="address2">
                                                     </div>
-                                                    <p>City:Jodhpur</p>
-                                                    <p>State: Rajasthan</p>
+                                                    <p>City: <span id="contact_city"></span></p>
+                                                    <p>State: <span id="contact_state"></span></p>
                                                 </div>
                                             </div>
+                                            <div class="modal-footer-parent"></div>
                                         </form>
                                     </div>
-                                    <div class="modal-footer-parent"></div>
                                 </div>
                             </div>
                         </div>
@@ -156,15 +181,28 @@
                                                 @foreach($data['isconfirmed'] as $user)
                                                     <tr id="link{{$user->id}}" role="row" class="odd">
                                                         <td class="sorting_1">{{$user->id}}</td>
-                                                        <td>{{$user->name}}</td>
-                                                        <td>{{$user->email}}</td>
-                                                        <td>66</td>
-                                                        <td>{{$user->created_at}}</td>
-                                                        <td>$86,000</td>
+                                                        <td>{{$user->contact_name}}</td>
+                                                        <td>{{$user->contact_email}}</td>
+                                                        <td>{{$user->contact_phone}}</td>
+                                                        @if($user->type_meu=='Month'&&$user->contact_meu>=12)
+                                                            <?php
+                                                            $year = round(($user->contact_meu)/12);
+                                                            $month = ($user->contact_meu)%12;
+                                                            ?>
+                                                            <td>{{$year}} Year {{$month}} Month</td>
+                                                        @else
+                                                        <td>{{$user->contact_meu}} {{$user->type_meu}}</td>
+                                                        @endif
+                                                        <?php
+                                                            $old_date = date($user->contact_visit);
+                                                            $new_date = date('d/m/Y H:i A', strtotime($old_date));
+                                                        ?>
+                                                        <td>{{$new_date}}</td>
+                                                       
                                                         <td>
                                                             <a href="javascript:void(0)" data-id="{{$user->id }}"
-                                                               onclick="DetailUser(event.target)" id="exampleModal1"
-                                                               class="btn btn-primary confirm-btn">Confirm</a>
+                                                               id="exampleModal1"
+                                                               class="btn btn-primary confirm-btn confirm-data">Confirm</a>
                                                         </td>
                                                 @endforeach
                                             @endif
@@ -225,15 +263,27 @@
                                                 @foreach($data['notconfirmed'] as $user)
                                                     <tr id="link{{$user->id}}" role="row" class="odd">
                                                         <td class="sorting_1">{{$user->id}}</td>
-                                                        <td>{{$user->name}}</td>
-                                                        <td>{{$user->email}}</td>
-                                                        <td>66</td>
-                                                        <td>{{$user->created_at}}</td>
-                                                        <td>$86,000</td>
+                                                        <td>{{$user->contact_name}}</td>
+                                                        <td>{{$user->contact_email}}</td>
+                                                        <td>{{$user->contact_phone}}</td>
+                                                        @if($user->type_meu=='Month'&&$user->contact_meu>=12)
+                                                        <?php
+                                                        $year = round(($user->contact_meu)/12);
+                                                        $month = ($user->contact_meu)%12;
+                                                        ?>
+                                                        <td>{{$year}} Year {{$month}} Month</td>
+                                                        @else
+                                                        <td>{{$user->contact_meu}} {{$user->type_meu}}</td>
+                                                        @endif
+                                                        <?php
+                                                            $old_date = date($user->contact_visit);
+                                                            $new_date = date('d/m/Y H:i A', strtotime($old_date));
+                                                        ?>
+                                                        <td>{{$new_date}}</td>
                                                         <td>
                                                             <a href="javascript:void(0)" data-id="{{$user->id }}"
-                                                               onclick="DetailUser(event.target)" id="exampleModal1"
-                                                               class="btn btn-primary confirm-btn">Confirm</a>
+                                                                id="exampleModal1"
+                                                                class="btn btn-primary confirm-btn confirm-data">Confirm</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -245,339 +295,60 @@
                             </div>
                         </div>
                     </div>
-                </div><!--------------------
-              START - Color Scheme Toggler
-              -------------------->
-                <div class="floated-colors-btn second-floated-btn">
-                    <div class="os-toggler-w">
-                        <div class="os-toggler-i">
-                            <div class="os-toggler-pill"></div>
-                        </div>
-                    </div>
-                    <span>Dark </span><span>Colors</span>
                 </div>
-                <!--------------------
-                END - Color Scheme Toggler
-                --------------------><!--------------------
-              START - Demo Customizer
-              -------------------->
-                <div class="floated-customizer-btn third-floated-btn">
-                    <div class="icon-w">
-                        <i class="os-icon os-icon-ui-46"></i>
-                    </div>
-                    <span>Customizer</span>
-                </div>
-                <div class="floated-customizer-panel">
-                    <div class="fcp-content">
-                        <div class="close-customizer-btn">
-                            <i class="os-icon os-icon-x"></i>
-                        </div>
-                        <div class="fcp-group">
-                            <div class="fcp-group-header">
-                                Menu Settings
-                            </div>
-                            <div class="fcp-group-contents">
-                                <div class="fcp-field">
-                                    <label for="">Menu Position</label><select class="menu-position-selector">
-                                        <option value="left">
-                                            Left
-                                        </option>
-                                        <option value="right">
-                                            Right
-                                        </option>
-                                        <option value="top">
-                                            Top
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Menu Style</label><select class="menu-layout-selector">
-                                        <option value="compact">
-                                            Compact
-                                        </option>
-                                        <option value="full">
-                                            Full
-                                        </option>
-                                        <option value="mini">
-                                            Mini
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field with-image-selector-w" style="display: none;">
-                                    <label for="">With Image</label><select class="with-image-selector">
-                                        <option value="yes">
-                                            Yes
-                                        </option>
-                                        <option value="no">
-                                            No
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Menu Color</label>
-                                    <div class="fcp-colors menu-color-selector">
-                                        <div class="color-selector menu-color-selector color-bright"></div>
-                                        <div class="color-selector menu-color-selector color-dark"></div>
-                                        <div class="color-selector menu-color-selector color-light"></div>
-                                        <div class="color-selector menu-color-selector color-transparent selected"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fcp-group">
-                            <div class="fcp-group-header">
-                                Sub Menu
-                            </div>
-                            <div class="fcp-group-contents">
-                                <div class="fcp-field">
-                                    <label for="">Sub Menu Style</label><select class="sub-menu-style-selector">
-                                        <option value="flyout">
-                                            Flyout
-                                        </option>
-                                        <option value="inside">
-                                            Inside/Click
-                                        </option>
-                                        <option value="over">
-                                            Over
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Sub Menu Color</label>
-                                    <div class="fcp-colors">
-                                        <div class="color-selector sub-menu-color-selector color-bright selected"></div>
-                                        <div class="color-selector sub-menu-color-selector color-dark"></div>
-                                        <div class="color-selector sub-menu-color-selector color-light"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fcp-group">
-                            <div class="fcp-group-header">
-                                Other Settings
-                            </div>
-                            <div class="fcp-group-contents">
-                                <div class="fcp-field">
-                                    <label for="">Full Screen?</label><select class="full-screen-selector">
-                                        <option value="yes">
-                                            Yes
-                                        </option>
-                                        <option value="no">
-                                            No
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Show Top Bar</label><select class="top-bar-visibility-selector">
-                                        <option value="yes">
-                                            Yes
-                                        </option>
-                                        <option value="no">
-                                            No
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Above Menu?</label><select class="top-bar-above-menu-selector">
-                                        <option value="yes">
-                                            Yes
-                                        </option>
-                                        <option value="no">
-                                            No
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="fcp-field">
-                                    <label for="">Top Bar Color</label>
-                                    <div class="fcp-colors">
-                                        <div class="color-selector top-bar-color-selector color-bright"></div>
-                                        <div class="color-selector top-bar-color-selector color-dark"></div>
-                                        <div class="color-selector top-bar-color-selector color-light"></div>
-                                        <div class="color-selector top-bar-color-selector color-transparent selected"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--------------------
-                END - Demo Customizer
-                --------------------><!--------------------
-              START - Chat Popup Box
-              -------------------->
-                <div class="floated-chat-btn">
-                    <i class="os-icon os-icon-mail-07"></i><span>Demo Chat</span>
-                </div>
-                <div class="floated-chat-w">
-                    <div class="floated-chat-i">
-                        <div class="chat-close">
-                            <i class="os-icon os-icon-close"></i>
-                        </div>
-                        <div class="chat-head">
-                            <div class="user-w with-status status-green">
-                                <div class="user-avatar-w">
-                                    <div class="user-avatar">
-                                        <img alt="" src="img/avatar1.jpg">
-                                    </div>
-                                </div>
-                                <div class="user-name">
-                                    <h6 class="user-title">
-                                        John Mayers
-                                    </h6>
-                                    <div class="user-role">
-                                        Account Manager
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chat-messages ps ps--theme_default"
-                             data-ps-id="57602b18-8145-c64f-cff8-4cda7f6b321d">
-                            <div class="message">
-                                <div class="message-content">
-                                    Hi, how can I help you?
-                                </div>
-                            </div>
-                            <div class="date-break">
-                                Mon 10:20am
-                            </div>
-                            <div class="message">
-                                <div class="message-content">
-                                    Hi, my name is Mike, I will be happy to assist you
-                                </div>
-                            </div>
-                            <div class="message self">
-                                <div class="message-content">
-                                    Hi, I tried ordering this product and it keeps showing me error code.
-                                </div>
-                            </div>
-                            <div class="ps__scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                                <div class="ps__scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                            </div>
-                            <div class="ps__scrollbar-y-rail" style="top: 0px; right: 0px;">
-                                <div class="ps__scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-                            </div>
-                        </div>
-                        <div class="chat-controls">
-                            <input class="message-input" placeholder="Type your message here..." type="text">
-                            <div class="chat-extra">
-                                <a href="#"><span class="extra-tooltip">Attach Document</span><i
-                                            class="os-icon os-icon-documents-07"></i></a><a href="#"><span
-                                            class="extra-tooltip">Insert Photo</span><i
-                                            class="os-icon os-icon-others-29"></i></a><a href="#"><span
-                                            class="extra-tooltip">Upload Video</span><i
-                                            class="os-icon os-icon-ui-51"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--------------------
-                END - Chat Popup Box
-                -------------------->
             </div>
         </div>
     </div>
 @endsection
 @section('script')
     <script>
-        // $(document).ready(function () {
-        function DetailUser(event) {
-            var id = $(event).data("id");
-            var _url = "{{asset('user/detail')}}/" + id;
+        $(document).ready(function () {
+        $('.confirm-data').on('click',function(){
+            var id = $(this).data("id");
+            var _url = "{{asset('api/getDetailUser')}}/" + id;
             $.ajax({
                 url: _url,
                 type: "get",
-                success: function (response) {
-                    if (response) {
-                        var dateObj = new Date(response.data.createAt);
-                        var month = dateObj.getUTCMonth() + 1; //months from 1-12
-                        var day = dateObj.getDate();
-                        var year = dateObj.getUTCFullYear();
-                        $("#createAt").html(day + '/' + month + '/' + year);
-                        console.log(response.data.scheduleDate);
-                        $("input#scheduleDate").val(response.data.scheduleDate);
-                        $("#name").html(response.data.name);
-                        $("input#address1").val(response.data.address1);
-                        $("#email").html(response.data.email);
+                success: function (data) {
+                    console.log(data);
+                    if (data) {
+                        $("#name").html(data[0].contact_name);
+                        $("#address1").val(data[0].contact_adr_1);
+                        $("#address2").val(data[0].contact_adr_2);
+                        $("#email").html(data[0].contact_email);
+                        $("#phone").html(data[0].contact_phone);
+                        if(data[0].type_meu=='Month'&& data[0].contact_meu>=12){
+                            year = Math.floor((data[0].contact_meu)/12);
+                            month = (data[0].contact_meu)%12;
+                            if(month==0){
+                                $("#contact_meu").html(year+'Year');
+                            
+                            }else{
+                                $("#contact_meu").html(year+' Year '+month+" Month");
+                            }
+                        }else{
+                            $("#contact_meu").html(data[0].contact_meu+'Year')
+                        }
+                        $("#contact_pincode").html(data[0].contact_pincode);
+                        $("#createAt").html(data[0].created_at);
+                        $("#contact_city").html(data[0].contact_city);
+                        $("#contact_state").html(data[0].contact_state);
+                        $("#scheduleDate").val(data[0].contact_visit);
+                        $("#id-contact").val(data[0].id);
                         $('#exampleModal').addClass("show");
                         $('#exampleModal').css("display", "block");
-                        if (response.data.confirm_status == 0) {
-                            $(".modal-footer").remove();
-                        } else {
+                        if (data[0].status == 1) {
                             $(".modal-footer-parent").append("<div class=\"modal-footer\">\n" +
-                                "<button href=\"javascript:void(0)\" data-id=\"\" onclick=\"editUser(event.target)\" id=\"confirm-status\" class=\"btn btn-primary confirm-btn\">Confirm</button>\n" +
+                                "<button type='submit' data-id=\"\" id=\"confirm-status\" class=\"btn btn-primary confirm-btn\">Confirm</button>\n" +
                                 "</div>");
-                            $('.modal-footer button').attr("data-id", response.data.id);
-
+                            $('.modal-footer button').attr("data-id", data[0].id);
+                        } else {
+                            $(".modal-footer").remove();
                         }
                     }
                 }
             });
-        }
-
-        function editUser(event) {
-            var id = $(event).data("id");
-            var _url = "{{asset('user/edit')}}/" + id;
-            var _token = $('meta[name="csrf-token"]').attr('content');
-            var address1 = $('#address1').val();
-            var scheduleDate = $('#scheduleDate').val();
-            // var _token = $("#token").val();
-            $.ajax({
-                url: _url,
-                type: "post",
-                data: {
-                    _token: _token,
-                    address1: address1,
-                    scheduleDate: scheduleDate,
-                },
-                success: function (response) {
-                    if (response.data == 'error') {
-                        alert('Cant enter schedualDate is not greater than today');
-                    } else {
-                        var dateObj = new Date(response.data.scheduleDate);
-                        var month = dateObj.getUTCMonth() + 1; //months from 1-12
-                        var day = dateObj.getDate();
-                        var year = dateObj.getUTCFullYear();
-                        var hours = dateObj.getHours();
-                        var minutes = dateObj.getMinutes();
-                        var ampm = hours >= 12 ? 'pm' : 'am';
-                        hours = hours % 12;
-                        hours = hours ? hours : 12; // the hour '0' should be '12'
-                        minutes = minutes < 10 ? '0' + minutes : minutes;
-                        $("input#address1").html(response.data.address1);
-                        $("input#scheduleDate").val(response.data.scheduleDate);
-                        $("#createAt").html(response.data.createAt);
-                        $("#name").html(response.data.name);
-                        $("#email").html(response.data.email);
-                        $("#link" + id).remove();
-                        $("#step1 tbody").append('<tr id="link' + response.data.id + '" role="row" class="odd">\n' +
-                                '                                                        <td class="sorting_1">' + response.data.id + '</td>\n' +
-                                '                                                        <td>' + response.data.name + '</td>\n' +
-                                '                                                        <td>' + response.data.email + '</td>\n' +
-                                '                                                        <td>66</td>\n' +
-                                '                                                        <td>' + day + '/' + month + '/' + year + '-' + hours + ':' + minutes + ampm + '</td>\n' +
-                                '                                                        <td>$86,000</td>\n' +
-                                '                                                        <td>\n' +
-                                '                                                            <a href="javascript:void(0)" data-id="' + response.data.id + '"\n' +
-                                '                                                               onclick="DetailUser(event.target)" id="exampleModal1"\n' +
-                                '                                                               class="btn btn-primary confirm-btn">Confirm</a>\n' +
-                                '                                                        </td>\n' +
-                                '                                                    </tr>');
-
-                    }
-                }
-                ,success:function () {
-                    $('#exampleModal').removeClass("show");
-                    $('#exampleModal').css("display", "none");
-                    alert('Edit successfuly');
-                }
-                , error: function () {
-                    alert('Please enter address1');
-                }
-            });
-        }
-    </script>
-    <script>
-        $(document).ready(function () {
+        }) 
             $('.close').click(
                 function () {
                     $(".modal-footer").remove();

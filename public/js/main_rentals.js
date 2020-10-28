@@ -18,6 +18,17 @@ $(function () {
     $('.ion-range-slider').ionRangeSlider({
       min: 0,
       max: 200,
+      grid: true, 
+      grid_num:8
+    });
+  }
+  
+  if ($('.ion-range-slider2').length) {
+    $('.ion-range-slider2').ionRangeSlider({
+      min: 0,
+      max: 72,
+      grid: true,
+      grid_num:6
     });
   } // #2. FEATURES SELECT
 

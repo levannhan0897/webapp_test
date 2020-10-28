@@ -26,11 +26,15 @@
 <script src="{{asset('bower_components/bootstrap/js/dist/tab.js')}}"></script>
 <script src="{{asset('bower_components/bootstrap/js/dist/tooltip.js')}}"></script>
 <script src="{{asset('bower_components/bootstrap/js/dist/popover.js')}}"></script>
+<script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('js/demo_customizer.js?version=4.5.0')}}"></script>
 <script src="{{asset('js/apigoogle.js')}}"></script>
 <script src="{{asset('js/sketchpad.js')}}"></script>
 <script src="{{asset('js/main.js?version=4.5.0')}}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/js/bootstrap-datetimepicker.min.js"></script>
+
+
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

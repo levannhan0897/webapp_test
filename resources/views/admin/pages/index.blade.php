@@ -5,6 +5,16 @@
     .card-header,.card{
     border-radius: 0 !important;
 }
+.btn-super-hide{
+    display: none;
+}
+div#system_size,div#tpc,div#remaining,div#emi {
+    display: contents;
+}
+.err-location{
+    color: rgb(236, 59, 59);
+    font-size: 12px;
+}
 .filter-toggle{
     background: #F4F4F4;
     display: flex;
@@ -135,13 +145,15 @@ input#upload-canvar {
     border-color: rgb(241, 91, 91);
     margin-top: 1rem;
 }
-
+.bank-div{
+    display: none
+}
 </style>
 
 <div class="content-i" style="width: 100%">
 <div class="content-box">
     <div class="row">
-        <div class="col-sm-12 col-xxxl-9">
+        <div class="col-sm-12">
             <div class="element-wrapper">
                 <h6 class="element-header">
                     Site Inspection Detail
@@ -150,6 +162,15 @@ input#upload-canvar {
                     <form action="" enctype="multipart/form-data">
                     <div class="filter-side">
                         @foreach ($data as $item)
+                        
+                            @if(($item->session_1==1)&&($item->session_2==1)&&($item->session_3==1)&&($item->session_4==1)&&($item->session_5==1))
+                                <style>
+                                    .btn-super-hide{
+                                        display:block;
+                                    }
+                                </style>
+                            
+                            @endif
                     <input type="id" value="{{$item->id}}" id="id-hide" style="display: none">
                         <div class="filter-w basic">
                             <div class="filter-toggle">
@@ -200,9 +221,11 @@ input#upload-canvar {
                                           <form>
                                             <div class="form-group">
                                               <label for=""> lat</label><input class="form-control" placeholder="lat" name="lat" id="lat" type="text">
+                                              <div class="err-location err-lat"></div>
                                             </div>
                                             <div class="form-group">
                                               <label for="">long</label><input class="form-control" placeholder="long" name="long" id="long" type="text">
+                                              <div class="err-location err-long"></div>
                                             </div>
                                           </form>
                                         </div>
@@ -214,7 +237,7 @@ input#upload-canvar {
                                   </div>
                                 <div class="far-number-kw">Estimated System Size <br><div class="number-kw" id="system_size">
                                     {{isset($item->system_size)?$item->system_size:'0'}}
-                                </div><span>Kw</span></div>
+                                </div><span>KW</span></div>
                             </div>
                         </div>
                         <div class="filter-w">
@@ -309,7 +332,7 @@ input#upload-canvar {
                                 <i class="icon-arrow-down"></i>
                             </div>
                             <div class="filter-body">
-                                <div class="far-number-kw">Total Project Cost (includes 2 years of AMC) <br><div class="number-kw" id="tpc">Rs. 
+                                <div class="far-number-kw">Total Project Cost (includes 2 years of AMC) <br><span>Rs.</span><div class="number-kw" id="tpc"> 
                                     {{isset($item->tpc)?$item->tpc:'0'}}
                                 </div></div>
                                 <div class="">
@@ -325,22 +348,41 @@ input#upload-canvar {
                                         <div class="container tab-pane in active" id="tab_cash">
                                             <div>
                                             <label for="">Approx Panel to Inverter Length (in meters)</label><input class="form-control input-data" value="{{$item->deposit}}" name="deposit" type="number">
-                                                <div class="">Remaining<br><div id="remaining" class="number-kw">Rs.  {{isset($item->remaining)?$item->remaining:'0'}}</div></div>
+                                                <div class="">Remaining<br><span>Rs.</span><div id="remaining" class="number-kw">  {{isset($item->remaining)?$item->remaining:'0'}}</div></div>
                                             </div>
                                         </div>
                                         <div class="container tab-pane fade" id="tab_emi">
                                             <div>
                                                 <label for="">Down Payment</label><input class="form-control input-data" value="{{$item->down_payment}}" name="down_payment" type="number">
                                                 <div class="form-group">
-                                                    <label for="">No. of Months</label><input class="ion-range-slider input-data" value="{{$item->of_months}}" name="of_months" type="text">
+                                                    <label for="">No. of Months</label><input class="ion-range-slider2 input-data" value="{{$item->of_months}}" name="of_months" type="text">
                                                 </div>
                                                 <label for="">Interest (est.)</label><input class="form-control input-data" value="{{$item->interest}}" name="interest" type="number">
-                                                <label for="">EMI:</label>
-                                                <div class="number-kw" id="emi">Rs. {{isset($item->emi)?$item->emi:'0'}}</div>
+                                                <label for="">EMI:</label><br>
+                                                <span>Rs.</span><div class="number-kw" id="emi"> {{isset($item->emi)?$item->emi:'0'}}</div><br>
                                                 <label for="">Existing Home Loan</label>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input input-data" name="existing_home" {{isset($item->existing_home)&&$item->existing_home=='yes'?'checked':''}} id="customSwitch1">
                                                     <label class="custom-control-label" for="customSwitch1"></label>
+                                                </div>
+                                                @if(isset($item->existing_home)&&$item->existing_home=='yes')
+                                                <style type="text/css">
+                                                    .bank-div{
+                                                        display: block;
+                                                    }
+                                                </style>
+                                                @endif
+                                                <div class="form-group bank-div">
+                                                    <label for="blank">Banking Partner</label>
+                                                    <select class="form-control" name="bank_id" id="">
+                                                        @foreach ($data_bank as $item_bank)
+                                                            <option value="{{$item_bank->id}}" {{($item_bank->id)==($item->bank_id)?'selected':''}}>{{$item_bank->bank_name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="form-group">
+                                                        <label for="bank_brand">Bank Branch</label>
+                                                        <input class="form-control input input-data" type="text" name="bank_branch" value="{{$item->bank_branch}}">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -373,10 +415,19 @@ input#upload-canvar {
                                     <div class="document_1_link" id="document_1_link" style="margin-top: .5rem"></div>
                                     @else
                                     <div class="document_btn" id="document_1_btn">
-                                        <input type="button" id="delete_document_1_btn" value="Remove" name="btn-remove-doc" class="btn btn-primary" style="margin-top:.5rem">
+                                        <input type="button" id="delete_document_1_btn" value="Remove" name="btn-remove-doc" class="btn btn-danger" style="margin-top:.5rem">
                                     </div>
                                     <div class="document_1_link" id="document_1_link" style="margin-top: .5rem">
-                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_1}}" class="document_1_href" target="_blank">View Document</a>
+                                        <?php
+                                            $file_extension = strrpos($item->document_1,'.');
+                                            $file_extension = substr($item->document_1,$file_extension+1);
+                                            $img_array_ok =  ['png','jpeg','jpg'];
+                                        ?>
+                                        @if(in_array($file_extension,$img_array_ok))
+                                        <a href="http://localhost/webapp_test/public/upload/{{$item->document_1}}" class="document_1_href" target='_blank'><img class='img-show' src='http://localhost/webapp_test/public/upload/{{$item->document_1}}' alt=''></a>
+                                        @else
+                                        <a href="http://localhost/webapp_test/public/upload/{{$item->document_1}}" class="document_1_href" target="_blank">View Document</a>
+                                        @endif
                                     </div>
                                     @endif
                                 </div>
@@ -393,10 +444,19 @@ input#upload-canvar {
                                     <div class="document_2_link" id="document_2_link" style="margin-top: .5rem"></div>
                                     @else
                                     <div class="document_btn" id="document_2_btn">
-                                        <input type="button" id="delete_document_2_btn" value="Remove" name="btn-remove-doc" class="btn btn-primary" style="margin-top:.5rem">
+                                        <input type="button" id="delete_document_2_btn" value="Remove" name="btn-remove-doc" class="btn btn-danger" style="margin-top:.5rem">
                                     </div>
                                     <div class="document_2_link" id="document_2_link" style="margin-top: .5rem">
-                                        <a href="http://localhost/webapp_test/public/upload/{{$item->document_2}}" class="document_2_href" target="_blank">View Document</a>
+                                        <?php
+                                        $file_extension = strrpos($item->document_2,'.');
+                                        $file_extension = substr($item->document_2,$file_extension+1);
+                                        $img_array_ok =  ['png','jpeg','jpg'];
+                                    ?>
+                                    @if(in_array($file_extension,$img_array_ok))
+                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_2}}" class="document_2_href" target='_blank'><img class='img-show' src='http://localhost/webapp_test/public/upload/{{$item->document_2}}' alt=''></a>
+                                    @else
+                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_2}}" class="document_2_href" target="_blank">View Document</a>
+                                    @endif
                                     </div>
                                     @endif
                                 </div>
@@ -415,10 +475,19 @@ input#upload-canvar {
                                     </div>
                                     @else
                                     <div class="document_btn" id="document_3_btn">
-                                        <input type="button" id="delete_document_3_btn" value="Remove" name="btn-remove-doc" class="btn btn-primary" style="margin-top:.5rem">
+                                        <input type="button" id="delete_document_3_btn" value="Remove" name="btn-remove-doc" class="btn btn-danger" style="margin-top:.5rem">
                                     </div>
                                     <div class="document_3_link" id="document_3_link" style="margin-top: .5rem">
-                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_2}}" class="document_3_href" target="_blank">View Document</a>
+                                        <?php
+                                        $file_extension = strrpos($item->document_3,'.');
+                                        $file_extension = substr($item->document_3,$file_extension+1);
+                                        $img_array_ok =  ['png','jpeg','jpg'];
+                                    ?>
+                                    @if(in_array($file_extension,$img_array_ok))
+                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_3}}" class="document_3_href" target='_blank'><img class='img-show' src='http://localhost/webapp_test/public/upload/{{$item->document_3}}' alt=''></a>
+                                    @else
+                                    <a href="http://localhost/webapp_test/public/upload/{{$item->document_3}}" class="document_3_href" target="_blank">View Document</a>
+                                    @endif
                                     </div>
                                     @endif
                                 </div>
@@ -453,7 +522,7 @@ input#upload-canvar {
                                         @endphp
                                         <div class="show-list-img">
                                             @foreach ($arr_listname_panel as $item_img)
-                                                <img class='img-show' src='http://localhost/webapp_test/public/file_area/{{$item_img}}' alt=''>
+                                                <a target="_blank" href="http://localhost/webapp_test/public/file_area/{{$item_img}}"><img class='img-show' src='http://localhost/webapp_test/public/file_area/{{$item_img}}' alt=''></a>
                                             @endforeach
                                         </div>
                                     @endif
@@ -499,9 +568,11 @@ input#upload-canvar {
                                         @endphp
                                         <div class="show-list-video">
                                             @foreach ($arr_listname_video as $item_video)
+                                            
                                             <video width='320' height='240' class='video-show' controls>
                                                 <source src='http://localhost/webapp_test/public/file_area/{{$item_video}}' type='video/mp4'>
                                             </video>
+                                            <a href="http://localhost/webapp_test/public/file_area/{{$item_video}}" class="video-show" target="_blank">open_new_tab</a>
                                             @endforeach 
                                         </div>
                                     @endif
@@ -512,7 +583,7 @@ input#upload-canvar {
                     </div>
                     </form>
                     <hr>
-                    <a href="#" class="btn btn-primary fl-left"> <i class="fa fa-angle-double-left" aria-hidden="true"></i> Back </a>
+                    <a href="http://localhost/webapp_test/public/show-list-inspec" class="btn btn-primary fl-left btn-super-hide"> <i class="fa fa-angle-double-left" aria-hidden="true"></i> Back </a>
                 </div>
             </div>
         </div>
@@ -538,6 +609,16 @@ input#upload-canvar {
             }
         })
         $('.save-location').on('click',function(){
+            $('.err-location').empty();
+            if($('#lat').val()==""){
+                $('.err-lat').text('lat is not to blank')
+                return false
+            }
+            if($('#long').val()==""){
+                $('.err-long').text('long is not to blank')
+                return false
+            }
+            $('#loading').show();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -552,7 +633,9 @@ input#upload-canvar {
                     'long': $('#long').val()
                 },
                 success: function (data) {
-                        
+                    $('#loading').hide();
+                        alert('save ok')
+                        $('.bd-example-modal-sm').modal('toggle');
                     }
             });
         });
@@ -565,6 +648,7 @@ input#upload-canvar {
             var canvas = document.getElementById('sketchpad');
             var dataURL = canvas.toDataURL();
             id = $('#id-hide').val()
+            $('#loading').show();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -578,7 +662,9 @@ input#upload-canvar {
                     imgBase64: dataURL
                 },
                 success: function (data) {
-                        
+                    $('#loading').hide();
+                        $('#image_show').attr('src','http://localhost/webapp_test/public/img/'+data.panel_image);
+                        $('#drawSlideModal').modal('toggle');
                     }
             })
         })
@@ -668,18 +754,33 @@ input#upload-canvar {
             $(this).parent().siblings().find('.icon-arrow-down').removeClass('icon-arrow-up')
             $('.filter-w').addClass('collapsed');
         });
-        $('input.input-data').on('change',function(){
+        $('input.input-data,select').on('focusin', function(){
+            $(this).data('val', $(this).val());
+            }).on('change',function(){
             if($(this).attr("type")=="checkbox"){
                 if(this.checked) {
                     val = 'yes'
+                    $('.bank-div').css('display','block');
                 }else{
                     val = 'no'
+                    $('.bank-div').css('display','none');
                 }
             }else{
             val = $(this).val();
+                if(val==""){
+                    alert('cannot be left blank');
+                    $(this).val($(this).data('val'));
+                    return false;
+                }
+                if(val==0){
+                    alert('Ở ĐÂY CHUNG TÔI KHÔNG LÀM THẾ');
+                    $(this).val($(this).data('val'));
+                    return false;
+                }
             }
             name = $(this).attr("name");
             id = $('#id-hide').val()
+            $('#loading').show();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -694,6 +795,12 @@ input#upload-canvar {
                     'val':val
                 },
                 success: function (data) {
+                    $('#loading').hide();
+                    if(data[0].super_btn_hide!==""){
+                        $('.btn-super-hide').show()
+                    }else{
+                        $('.btn-super-hide').hide()
+                    }
                         if(data[0].ss1==1){
                             if($('.ss1-img')[0]){
 
@@ -771,6 +878,7 @@ input#upload-canvar {
             fd.append('val', $(this)[0].files[0] );
             fd.append('name', $(this).attr('name'));
             fd.append('id',$('#id-hide').val());
+            $('#loading').show();
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -783,8 +891,15 @@ input#upload-canvar {
             processData: false,
             contentType: false,
             success: function (data) {
+                $('#loading').hide();
+                if(data.super_btn_hide!==""){
+                    $('.btn-super-hide').show()
+                }
+                else{
+                    $('.btn-super-hide').hide()
+                }
                 if(data.ss4==1){
-                        if($('.s4-img')[0]){
+                        if($('.ss4-img')[0]){
 
                         }else{
                         $('.ss4').append("<img src='http://localhost/webapp_test/public/img/1200px-Check_green_icon.svg.png' class='ss4-img' style='width: 14px' alt=''>")
@@ -801,11 +916,23 @@ input#upload-canvar {
                     if($(classnamehref)[0]){
                         $(classnamehref).remove();
                         $(deletebtn).remove();
-                        $(classnamebtn).append( "<input type='button' id='delete_"+data.name+"_btn' value='Remove' name='btn-remove-doc' class='btn btn-primary' style='margin-top:.5rem'/>" );
-                        $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'>View Document</a>" );
+                        $(classnamebtn).append( "<input type='button' id='delete_"+data.name+"_btn' value='Remove' name='btn-remove-doc' class='btn btn-danger' style='margin-top:.5rem'/>" );
+                        console.log(data.type);
+                        if(data.type=="document"){
+                            $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'>View Document</a>" );
+                        }else{
+                            $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'><img class='img-show' src='"+data.url_file+"' alt=''></a>");
+                        }
                     }else{
-                    $(classnamebtn).append( "<input type='button' id='delete_"+data.name+"_btn' value='Remove' name='btn-remove-doc' class='btn btn-primary' style='margin-top:.5rem'/>" );
-                    $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'>View Document</a>" );
+                    $(classnamelink).find('.img-show').remove();
+                    $(deletebtn).remove();
+
+                    $(classnamebtn).append( "<input type='button' id='delete_"+data.name+"_btn' value='Remove' name='btn-remove-doc' class='btn btn-danger' style='margin-top:.5rem'/>" );
+                    if(data.type=="document"){
+                            $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'>View Document</a>" );
+                        }else{
+                            $(classnamelink).append( "<a href='"+data.url_file+"' class='"+data.name+"_href' target='_blank'><img class='img-show' src='"+data.url_file+"' alt=''></a>");
+                        }
                     $(name_re_val).val('Re-Upload');
                     }
                 }
@@ -813,9 +940,13 @@ input#upload-canvar {
             })
         });
         $('.document_btn').on('click',function(){
+            if (!confirm("Do you want to delete")){
+                return false;
+            }
             idBtnremove = $(this).children('input[name=btn-remove-doc]').attr('id');
             stringdoc = idBtnremove.substring(7, 17);
             id = $('#id-hide').val()
+            $('#loading').show();
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -829,6 +960,12 @@ input#upload-canvar {
                 'namedoc':stringdoc,
             },
             success: function (data) {
+                $('#loading').hide();
+                if(data.super_btn_hide!==""){
+                        $('.btn-super-hide').show()
+                    }else{
+                        $('.btn-super-hide').hide()
+                    }
                 if(data.ss4==0){
                         if($('.ss4-img')[0]){
                             $('.ss4-img').remove()
@@ -871,6 +1008,7 @@ input#upload-canvar {
             }
             fd.append('namedb', $(this).attr('id'));
             fd.append('id',$('#id-hide').val());
+            $('#loading').show();
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -883,6 +1021,12 @@ input#upload-canvar {
                 contentType: false,
                 processData: false,
                 success: function (data) {
+                    $('#loading').hide();
+                    if(data.super_btn_hide!==""){
+                        $('.btn-super-hide').show()
+                    }else{
+                        $('.btn-super-hide').hide()
+                    }
                     if(data.ss5==1){
                         if($('.ss5-img')[0]){
 
@@ -897,7 +1041,7 @@ input#upload-canvar {
                             $(namediv).find('.delete_area .btn-remove').remove();
                             $(btnup).val('Re-Upload');
                             for(i=0;i<data.url_file.length;i++){
-                                $(namediv).find('.show-list-img').append("<img class='img-show' src='"+data.url_file[i]+"' alt=''>");
+                                $(namediv).find('.show-list-img').append("<a href='"+data.url_file[i]+"' target='_blank'><img class='img-show' src='"+data.url_file[i]+"' alt=''></a>");
                             }
                             $(namediv).find('.delete_area').append("<input type='button' value='Delete' id='"+data.namedb+"_remove' class='btn btn-primary btn-remove'>");
                     }
@@ -908,7 +1052,7 @@ input#upload-canvar {
                         $(namediv).find('.delete_area .btn-remove').remove();
                         $(btnup).val('Re-Upload');
                         for(i=0;i<data.url_file.length;i++){
-                                $(namediv).find('.show-list-video').append("<video width='320' height='240' class='video-show' controls><source src='"+data.url_file[i]+"' type='video/mp4'></video>");
+                                $(namediv).find('.show-list-video').append("<video width='320' height='240' class='video-show' controls><source src='"+data.url_file[i]+"' type='video/mp4'></video><a href='"+data.url_file[i]+"' class='video-show' target='_blank'>open_new_tab</a>");
                         }
                         $(namediv).find('.delete_area').append("<input type='button' value='Delete' id='"+data.namedb+"_remove' class='btn btn-primary btn-remove'>");
                     }
@@ -930,6 +1074,7 @@ input#upload-canvar {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            $('#loading').show();
             $.ajax({
                 url:'{{asset("api/delete-area")}}',
                 type:'POST',
@@ -938,6 +1083,12 @@ input#upload-canvar {
                     'name':namearea,
                 },
                 success: function (data) {
+                    $('#loading').hide();
+                    if(data.super_btn_hide!==""){
+                        $('.btn-super-hide').show()
+                    }else{
+                        $('.btn-super-hide').hide()
+                    }
                     if(data.ss5==0){
                         if($('.ss5-img')[0]){
                             $('.ss5-img').remove()

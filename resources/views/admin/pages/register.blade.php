@@ -2,6 +2,72 @@
 <html>
 @include('admin.layout.head')
 <body>
+<style>
+span.input-group-addon {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    border-collapse: separate;
+    box-sizing: border-box;
+    display: table-cell;
+    width: 13%;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 12px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    cursor: pointer;
+}
+span.glyphicon.glyphicon-chevron-down {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    list-style: none;
+    border-spacing: 0;
+    border-collapse: collapse;
+    color: #337ab7;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+    box-sizing: border-box;
+    position: relative;
+    top: 1px;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    width: 54px;
+    height: 54px;
+    line-height: 54px;
+    margin: 2px 1.5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.glyphicon-chevron-down:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f107";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    font-weight: 900;
+}
+.glyphicon-chevron-up:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f106";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    font-weight: 900;
+}
+    </style>
 <div class="all-wrapper menu-side with-pattern">
     <div class="auth-box-w wider">
         <div class="logo-w">
@@ -69,7 +135,14 @@
                 <label for="">Email</label><input class="form-control" placeholder="Enter email" name="email" type="email" aria-invalid="true">
             </div>
             <div class="form-group">
-                <label for="">Visit Date and Time</label><input class="form-control" name="contact_visit" placeholder="Enter Visit Date and Time" type="datetime-local">
+                <label for="">Visit Date and Time</label>
+                {{-- <input class="form-control" name="contact_visit" placeholder="Enter Visit Date and Time" type="datetime-local"> --}}
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' name="contact_visit" placeholder="Enter Visit Date and Time" class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"><i class="icon-calendar"></i></span>
+                    </span>
+                </div>
             </div>
             <div class="buttons-w">
                 <button  class="btn btn-primary btn-contact">Contact Now</button>
@@ -83,6 +156,12 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 <script>
 $(document).ready(function(){
+    $('#datetimepicker1').datetimepicker({
+    defaultDate: new Date(),
+    format: 'DD-MM-YYYY H:mm',
+    sideBySide: true
+    });
+
     $.validator.addMethod("regx", function(value, element, regexpr) {          
     return regexpr.test(value);
     }, "Please phone india.");
@@ -153,88 +232,6 @@ $('select[name="contact_state"]').on('change', function(){
     }
     })
 });
-
-// $(".btn-contact").click(function(){
-//     // $("form").submit(function(e){
-//     // e.preventDefault();
-//     // });
-//     var name = $('input[name=name]').val();
-//     var phone = $('input[name=phone]').val();
-//     var email = $('input[name=email').val();
-//     var contact_adr_1 = $('input[name=contact_adr_1]').val();
-//     var contact_adr_2 = $('input[name=contact_adr_2]').val();
-//     var contact_pincode = $('input[name=contact_pincode]').val();
-//     var contact_city = $('select[name=contact_city]').val();
-//     var contact_state =  $('select[name=contact_state]').val();
-//     var contact_meu = $('input[name=contact_meu').val();
-//     var type_meu =  $('input[name="type_meu"]:checked').val();
-//     var contact_visit = $('input[name=contact_visit').val();
-//     $.ajaxSetup({
-//         headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         }
-//     });
-//     $.ajax({
-//         url: './register',
-//         method: 'post',
-//         data: {
-//             'name':name,
-//             'phone':phone,
-//             'email':email,
-//             'contact_adr_1':contact_adr_1,
-//             'contact_adr_2':contact_adr_2,
-//             'contact_pincode':contact_pincode,
-//             'contact_city':contact_city,
-//             'contact_state':contact_state,
-//             'contact_meu':contact_meu,
-//             'type_meu':type_meu,
-//             'contact_visit':contact_visit,
-//         },
-//         success: function (data) {
-//                 if(data.error == true){
-//                 $('.mess-err').hide();
-//                     if (data.message.name != undefined) {
-//                         $('.name-err').show().text(data.message.name[0]);
-//                     }
-//                     if (data.message.phone != undefined) {
-//                         $('.phone-err').show().text(data.message.phone[0]);
-//                     }
-//                     if (data.message.email != undefined) {
-//                         $('.email-err').show().text(data.message.email[0]);
-//                     }
-//                     if (data.message.contact_adr_1 != undefined) {
-//                         $('.contact-adr-1-err').show().text(data.message.contact_adr_1[0]);
-//                     }
-//                     if (data.message.contact_pincode != undefined) {
-//                         $('.contact-pincode-err').show().text(data.message.contact_pincode[0]);
-//                     }
-//                     if (data.message.contact_city != undefined) {
-//                         $('.contact-city-err').show().text(data.message.contact_city[0]);
-//                     }
-//                     if (data.message.contact_state != undefined) {
-//                         $('.contact-state-err').show().text(data.message.contact_state[0]);
-//                     }
-//                     if (data.message.contact_meu != undefined) {
-//                         $('.contact-meu-err').show().text(data.message.contact_meu[0]);
-//                     }
-//                     if (data.message.contact_visit != undefined) {
-//                         $('.contact-visit-err').show().text(data.message.contact_visit[0]);
-//                     }
-//                 }else{
-//                 //     window.setTimeout(function() {
-//                 //     swal({
-//                 //         title: "Wow!",
-//                 //         text: "Message!",
-//                 //         type: "success"
-//                 //     }, function() {
-//                 //         window.location = "./login";
-//                 //     });
-//                 // }, 1000);
-//                     window.location = './login';
-//                 }
-//             }
-//             })
-//         })
 })
 </script>
 </html>

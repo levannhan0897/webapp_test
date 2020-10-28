@@ -2,6 +2,7 @@
 <html>
 @include('admin.layout.head')
 <body class="menu-position-side menu-side-left full-screen">
+<div id="loading"><img id="loading-img" src="{{asset('img/loading.gif')}}" alt=""></div>
 <div class="all-wrapper solid-bg-all">
     <!--------------------
     START - Top Bar

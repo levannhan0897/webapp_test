@@ -20,4 +20,6 @@
     <link href="{{asset('bower_components/select2/dist/css/select2.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/main.css?version=4.5.0')}}" rel="stylesheet">
     <link href="{{asset('icon_fonts_assets/simple-line-icons/css/simple-line-icons.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/fontawesome.min.css')}}">
+    <link rel="stylesheet" href="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
 </head>

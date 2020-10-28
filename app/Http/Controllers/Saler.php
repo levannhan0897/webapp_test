@@ -12,11 +12,23 @@ use App\Http\Controllers\MailController;
 
 class Saler extends Controller
 {
+    public function url($urlcall){
+        return 'http://localhost/webapp_test/public/'.$urlcall;
+    }
     public function index(){
         return view('admin.pages.saler.index');
     }
     public function getContact(){
-        $listUser = $this->getListUser();
+        $response = Curl::to(url('api/get-data-contact'))->get();
+        $list_contact_users = json_decode($response);;
+        foreach($list_contact_users as $user){
+            if ($user->status==2){
+                $listUser['isconfirmed'][] = $user;
+            }
+            else{
+                $listUser['notconfirmed'][] = $user;
+            }
+        }
         return view('admin.pages.saler.get-contact',['data'=>$listUser]);
     }
 
@@ -37,29 +49,19 @@ class Saler extends Controller
         $response = Curl::to(route('getListUser'))->get();
         $response = json_decode($response);
         foreach ($response as $res){
-            foreach ($res as $r){
-                $createdAt = Carbon::parse($r['created_at']);
-                // $createdAt  = $createdAt->format('d/m/Y-H:i A');
-                // $r->created_at = $createdAt;
-                // if ($r->confirm_status==0){
-                //     $data['isconfirmed'][] = $r;
-                // }
-                // else{
-                //     $data['notconfirmed'][] = $r;
-                // }
+            $createdAt = Carbon::parse($res->created_at);
+            $createdAt  = $createdAt->format('d/m/Y-H:i A');
+            $res->created_at = $createdAt;
+            if ($res->confirm_status==0){
+                $data['isconfirmed'][] = $res;
+            }
+            else{
+                $data['notconfirmed'][] = $res;
             }
         }
         return $data;
     }
-    public function getDetailUser(Request $request,$id){
-        $response = Curl::to(asset('api/getDetailUser/').'/'.$id)->get();
-        $response = json_decode($response);
-        $createdAt = Carbon::parse($response->created_at);
-        $createdAt  = $createdAt->format('Y-m-d\TH:i');
-        $schedule_date = Carbon::parse($response->schedule_date);
-        $schedule_date  = $schedule_date->format('Y-m-d\TH:i');
-        return response()->json(['data' => ['name'=>$response->name, 'email'=>$response->email,'id'=>$id,'confirm_status'=>$response->confirm_status,'address1'=>$response->address1,'createAt'=>$createdAt,'scheduleDate'=>$schedule_date]]);
-    }
+
     public function getEditUser(Request $request,$id){
         $this->validate($request,
             [

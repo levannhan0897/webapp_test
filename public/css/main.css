@@ -30058,3 +30058,25 @@ Contents:
 }
 /* ##. User Override Styles */
 /*# sourceMappingURL=main.css.map */
+
+#loading {
+    background: white;
+    opacity: .2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 999999;
+    display:none;
+}
+#loading-img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+    z-index: 9999999;
+}
