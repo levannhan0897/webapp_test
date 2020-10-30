@@ -7,7 +7,7 @@
             <span>Menu</span>
         </li>
         <li class="selected has-sub-menu">
-            <a href="{{asset('/admin/index')}}">
+            <a href="{{asset('/show-page-dashboard')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layout"></div>
                 </div>
@@ -63,7 +63,7 @@
                 <span>Potentials</span></a>
         </li>
         <li class=" has-sub-menu">
-            <a href="{{asset('admin/sale/list-project')}}">
+            <a href="{{asset('show-page-list-project')}}">
                 <div class="icon-w">
                     <div class="os-icon os-icon-layers"></div>
                 </div>

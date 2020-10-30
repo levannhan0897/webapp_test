@@ -99,6 +99,11 @@ class UserController extends Controller
         $data = json_decode($response);
         return response()->json($data);
     }
+    public function create_potential(Request $req){
+        DB::insert('insert into potentials (user_id,site_inspection_id) values(?,?)',[$req->user_id,$req->site_inspection_id]);
+        DB::table('inspection')->where('id',$req->site_inspection_id)->update(['status'=>1]);
+        return redirect('get-potentials-list');
+    }
     public function get_potentials_list(Request $req){
         $response = Curl::to(url('api/get-potentials-list-api'))->get();
         $data = json_decode($response);
@@ -261,5 +266,18 @@ class UserController extends Controller
         Session::put('status',$data->status);
         Session::put('message',$data->message);
         return  redirect()->back();
+    }
+    public function show_page_dashboard(Request $req){
+        return view('admin.pages.dashboard');
+    }
+    public function show_page_list_project(Request $req){
+        $response = Curl::to(url('api/get-list-project-api'))->get();
+        $data = json_decode($response);
+        return view('admin.pages.list-project')->with('data',$data);
+    }
+    public function show_page_detail_project(Request $req){
+        $response = Curl::to(url('api/create-project-tracker-api/'.$req->id))->get();
+        $project = json_decode($response);
+        return view('admin.pages.detail-project')->with('project',$project);
     }
 }

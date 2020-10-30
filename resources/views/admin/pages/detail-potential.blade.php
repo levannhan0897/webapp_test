@@ -17,7 +17,7 @@
               <div class="col-sm-9 col-xs-6">
                 <input type="text" class="id-potentials" value="{{$item->id}}" style="display: none">
               <h5>Potentials ID - {{$item->id}}</h5>
-              <div class="link-view"><a href="http://localhost/webapp_test/public/get-inspection-detail/{{$item->site_inspection_id}}">Survey ID</a></div>
+              <div class="link-view"><a href="http://localhost/webapp_test/public/get-inspection-detail/{{$item->site_inspection_id}}">Survey ID {{$item->site_inspection_id}}</a></div>
               </div>
               <div class="col-sm-3 col-xs-6">
                 <div class="system-size">
@@ -86,7 +86,7 @@
                 </div>
               </fieldset>
               <div class="form-buttons-w">
-                <button class="btn btn-primary class-change update-status " type="submit"> Submit</button>
+              <button class="btn btn-primary class-change update-status" data-userid="{{$item->user_id}}" data-idspec="{{$item->site_inspection_id}}" type="submit"> Submit</button>
               </div>
             </form>
           </div>
@@ -105,7 +105,6 @@
       if(status==2){
         $('.reason-comments').css('display','none');
         $('.agreement').css('display','block');
-
       }
       if(status == 3||status == 4){
         $('.agreement').css('display','none');
@@ -136,6 +135,7 @@
           var reason = $('select[name=reason]').val();
           var comments = $('textarea[name=comments]').val();
         }
+        $('#loading').show();
         $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -148,9 +148,12 @@
             'id':id,
             'status':status,
             'reason':reason,
-            'comments':comments
+            'comments':comments,
+            'site_inspection_id':$(this).data('idspec'),
+            'id_user':$(this).data('userid')
         },
         success: function (data) {
+          $('#loading').hide();
           swal("Update success", "", "success");
         }
         })

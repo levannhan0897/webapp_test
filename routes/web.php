@@ -28,7 +28,8 @@ Route::post('/update-inspection-detail',[UserController::class,'update_inspectio
 Route::get('/get-inspection-detail/{id}',[UserController::class,'get_inspection_detail']);
 Route::get('/show-list-inspec',[UserController::class,'show_list_inspec']);
 Route::post('/save-img-canvar',[UserController::class,'save_img_canvar']);
-Route::get('/get-potentials-list',[UserController::class,'get_potentials_list']);
+Route::post('/create-potential',[UserController::class,'create_potential']);
+Route::get('/get-potentials-list',[UserController::class,'get_potentials_list'])->name('listPotentials');;
 Route::get('/detail-potentials/{id}',[UserController::class,'detail_potentials']);
 Route::get('/show-page-install',[UserController::class,'show_page_install']);
 Route::get('/show-page-add-install',[UserController::class,'show_page_add_install']);
@@ -42,7 +43,9 @@ Route::post('/add-user-sale',[UserController::class,'add_user_sale']);
 Route::get('/show-page-update-user-sale/{id}',[UserController::class,'show_page_update_user_sale']);
 Route::post('/update-user-sale',[UserController::class,'update_user_sale']);
 Route::post('/update-user-contact',[UserController::class,'update_user_contact']);
-Route::get('/show-page-dashboard-sale',[UserController::class,'show_page_dashboard_sale']);
+Route::get('/show-page-dashboard',[UserController::class,'show_page_dashboard']);
+Route::get('/show-page-list-project',[UserController::class,'show_page_list_project']);
+Route::get('/show-page-detail-project/{id}',[UserController::class,'show_page_detail_project']);
 
 ///
 //Route::get('test', [ForgotPasswordController::class, 'test']);
@@ -70,4 +73,3 @@ Route::get('mail/send', [MailController::class, 'send'])->name('sendEmail');
         Route::get('admin/sale/list', [Saler::class, 'index'])->name('saler');
         Route::get('admin/sale/get-contact', [Saler::class, 'getContact']);
         Route::get('admin/sale/dasboard', [Saler::class, 'getDasboard']);
-        Route::get('admin/sale/list-project', [Saler::class, 'getListProject']);

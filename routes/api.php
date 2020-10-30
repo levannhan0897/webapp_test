@@ -56,6 +56,9 @@ Route::post('/delete-sale-api',[UserApiController::class,'delete_sale_api']);
 Route::get('/get-data-contact',[UserApiController::class,'get_data_contact']);
 Route::post('/update-user-contact-api',[UserApiController::class,'update_user_contact_api']);
 Route::get('/get-bank-api',[UserApiController::class,'get_bank_api']);
+Route::get('/get-list-project-api',[UserApiController::class,'get_list_project_api']);
+Route::get('/create-project-tracker-api/{id}',[UserApiController::class,'create_project_tracker_api']);
+Route::post('/update-project-detail',[UserApiController::class,'update_project_detail']);
 //////////////////////////
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

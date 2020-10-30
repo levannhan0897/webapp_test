@@ -15,6 +15,7 @@ use FFMpeg\FFMpeg;
 use DB;
 use App\Models\Inspection;
 use File;
+use Carbon\Carbon;
 class UserApiController extends Controller
 {
     public function url($urlcall){
@@ -536,6 +537,7 @@ class UserApiController extends Controller
         ->join('contact','contact.id_user','=','inspection.id_user')
         ->select('inspection.id','users.name','users.email','users.phone','contact.contact_meu','contact.type_meu','inspection.updated_at',
         'inspection.session_1','inspection.session_2','inspection.session_3','inspection.session_4','inspection.session_5')
+        ->where('inspection.status',0)
         ->get();
         ;
         return response($list_inspec);
@@ -552,7 +554,7 @@ class UserApiController extends Controller
         $protentials = DB::table('potentials')
         ->join('users','users.id','=','potentials.user_id')
         ->join('inspection','inspection.id','=','potentials.site_inspection_id')
-        ->select('potentials.id','users.name','users.email','inspection.system_size','potentials.site_inspection_id','potentials.status','potentials.reason','potentials.comments')
+        ->select('potentials.id','potentials.user_id','users.name','users.email','inspection.system_size','potentials.site_inspection_id','potentials.status','potentials.reason','potentials.comments')
         ->where('potentials.id',$req->id)
         ->get();
         return response($protentials);
@@ -563,6 +565,11 @@ class UserApiController extends Controller
             'reason'=>$req->reason,
             'comments'=>$req->comments
         ]);
+        if($req->status==2){
+            $curren_time = Carbon::now();
+            $inspection = DB::table('inspection')->where('id',$req->site_inspection_id)->first();
+            DB::insert('insert into projects (id_user,site_inspection_id,effective_system_size,created_at) values(?,?,?,?)',[$req->id_user,$req->site_inspection_id, $inspection->system_size,$curren_time]);
+        }
         return response($protentials);
     }
     public function add_install_api(Request $req){
@@ -755,5 +762,82 @@ class UserApiController extends Controller
     public function get_bank_api(){
         $list_bank = DB::table('bank')->get();
         return response()->json($list_bank);
+    }
+    public function get_list_project_api(){
+        $list_project = DB::table('projects')
+        ->join('users','users.id','=','projects.id_user')
+        ->select('projects.*','users.name')
+        ->get();
+        return response()->json($list_project);
+    }
+    public function create_project_tracker_api(Request $req){
+        $project = DB::table('projects')->where('id',$req->id)->first();
+        $project_tracker_check = DB::table('project_tracker')->where('id_user',$project->id_user)->first();
+        if($project_tracker_check){
+            $project_super = DB::table('projects')
+                ->join('project_tracker','project_tracker.id_user','=','projects.id_user')
+                ->join('discom_application','discom_application.id_project','=','projects.id')
+                ->join('discom_commissioning_application','discom_commissioning_application.id_project','=','projects.id')
+                ->join('finance_application','finance_application.id_project','=','projects.id')
+                ->join('components_application','components_application.id_project','=','projects.id')
+                ->join('compliance_application','compliance_application.id_project','=','projects.id')
+                ->join('commission_application','commission_application.id_project','=','projects.id')
+                ->join('installation_application','installation_application.id_project','=','projects.id')
+                ->select('*')->where('projects.id',$req->id)->first();
+                return response()->json($project_super);
+        }else{
+            DB::insert('insert into project_tracker(id_user) values(?)',[$project->id_user]);
+            DB::insert('insert into discom_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into discom_commissioning_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into finance_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into components_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into compliance_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into commission_application(id_project) values(?)',[$req->id]);
+            DB::insert('insert into installation_application(id_project) values(?)',[$req->id]);
+
+        $project_super = DB::table('projects')
+            ->join('project_tracker','project_tracker.id_user','=','projects.id_user')
+            ->join('discom_application','discom_application.id_project','=','projects.id')
+            ->join('discom_commissioning_application','discom_commissioning_application.id_project','=','projects.id')
+            ->join('finance_application','finance_application.id_project','=','projects.id')
+            ->join('components_application','components_application.id_project','=','projects.id')
+            ->join('compliance_application','compliance_application.id_project','=','projects.id')
+            ->join('commission_application','commission_application.id_project','=','projects.id')
+            ->join('installation_application','installation_application.id_project','=','projects.id')
+            ->select('*')->where('projects.id',$req->id)->first();
+        return response()->json($project_super);
+        }
+    }
+    public function update_project_detail(Request $req){
+        if(isset($req->section)){
+            $cc=DB::table($req->section)->where('id_project',$req->id_project)->update([
+                $req->name => $req->val
+            ]);
+            $section = DB::table($req->section)->where('id_project',$req->id_project)->first();
+            switch ($req->section) {
+                case 'discom_application':
+                    if($section->d_application_submitted==1 && $section->d_status=="Approved"){$condition = true;}
+                break;
+                case 'finance_application':
+                    if($section->f_application_submitted==1 && $section->f_status=="Approved"){$condition = true;}
+                break;
+            }
+            if($condition){
+                DB::table('projects')->where('id',$req->id_project)->update([$req->section=>1]);
+                $project = DB::table('projects')->where('id',$req->id_project)->first();
+                DB::table('project_tracker')->where('id_user',$project->id_user)->update([$req->section=>1]);
+                return response()->json([
+                    $req->section=>1
+                ]);
+            }else{
+                DB::table('projects')->where('id',$req->id_project)->update([$req->section=>0]);
+                $project = DB::table('projects')->where('id',$req->id_project)->first();
+                DB::table('project_tracker')->where('id_user',$project->id_user)->update([$req->section=>0]);
+                return response()->json([
+                    $req->section=>0
+                ]);
+            }
+        }
+
     }
 }

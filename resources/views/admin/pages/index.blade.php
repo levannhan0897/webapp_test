@@ -159,7 +159,7 @@ input#upload-canvar {
                     Site Inspection Detail
                 </h6>
                 <div class="element-box">
-                    <form action="" enctype="multipart/form-data">
+                    <form action="" id="form1" enctype="multipart/form-data">
                     <div class="filter-side">
                         @foreach ($data as $item)
                         
@@ -169,7 +169,13 @@ input#upload-canvar {
                                         display:block;
                                     }
                                 </style>
-                            
+                            @endif
+                            @if($item->status==1)
+                            <style>
+                                .btn-super-hide{
+                                    display:none;
+                                }
+                            </style>
                             @endif
                     <input type="id" value="{{$item->id}}" id="id-hide" style="display: none">
                         <div class="filter-w basic">
@@ -579,11 +585,16 @@ input#upload-canvar {
                                 </div>
                             </div>
                         </div>
-                        @endforeach
                     </div>
                     </form>
                     <hr>
-                    <a href="http://localhost/webapp_test/public/show-list-inspec" class="btn btn-primary fl-left btn-super-hide"> <i class="fa fa-angle-double-left" aria-hidden="true"></i> Back </a>
+                    <form action="{{asset('create-potential')}}" method="POST">
+                        @csrf
+                    <input type="text" value="{{$item->id}}" name="site_inspection_id" style="display: none">
+                    <input type="text" value="{{$item->id_user}}" name="user_id" style="display: none">
+                        <button type="submit" class="btn btn-primary fl-left btn-super-hide"> Submit</button>
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -640,7 +651,7 @@ input#upload-canvar {
             });
         });
         //
-        $("form").submit(function(e){
+        $("#form1").submit(function(e){
             e.preventDefault();
         });
         //ajax canvar

@@ -66,7 +66,7 @@
                                             @if($item->status==1)
                                             <td>Negotiation/Review</td>
                                             @elseif($item->status==2)
-                                            <td>Closed Woniew</td>
+                                            <td>Closed Won</td>
                                             @elseif($item->status==3)
                                             <td>Closed Lost</td>
                                             @elseif($item->status==4)
